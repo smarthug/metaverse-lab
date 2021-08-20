@@ -13,6 +13,7 @@ function App() {
     <Router >
       <div style={{ height: "100vh" }} className="App">
         <Switch>
+          
           {labs.map(([k, v]) => {
             if (v.default) {
               const Tmp = v.default
@@ -26,6 +27,7 @@ function App() {
                 </Route>
               )
             }
+            return null
           })}
           <Route
             exact
@@ -42,6 +44,7 @@ function App() {
                   </div>
                 )
               }
+              return null
             })}
           </Route>
         </Switch>

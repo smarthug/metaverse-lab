@@ -135,28 +135,28 @@ export default function Main() {
 
     // cannons
     // controller
-    var geometry = new THREE.CylinderBufferGeometry(0.1, 0.1, 0.1, 6);
-    var texture = new THREE.TextureLoader().load(
+    var geometry1 = new THREE.CylinderBufferGeometry(0.1, 0.1, 0.1, 6);
+    var texture2 = new THREE.TextureLoader().load(
       "https://cdn.glitch.com/cf086db5-7af7-4f20-8220-93d1d99150b7%2Fdroplet_01.png?1558588643969"
     );
-    var material = new THREE.MeshMatcapMaterial({
-      matcap: texture,
+    var material1 = new THREE.MeshMatcapMaterial({
+      matcap: texture2,
       flatShading: true,
     });
 
     var group = new THREE.Group();
 
-    var mesh = new THREE.Mesh(geometry, material.clone());
+    var mesh = new THREE.Mesh(geometry1, material1.clone());
     mesh.position.set(0, 0.02, -0.06);
     mesh.rotation.set(Math.PI / 2, 0, 0);
     mesh.scale.set(0.9, 2.5, 0.6);
     group.add(mesh);
 
-    var mesh = new THREE.Mesh(geometry, material.clone());
-    mesh.position.set(0, -0.05, 0);
-    mesh.rotation.set(-Math.PI / 8, 0, 0);
-    mesh.scale.set(0.25, 1.5, 0.25);
-    group.add(mesh);
+    var mesh2 = new THREE.Mesh(geometry1, material1.clone());
+    mesh2.position.set(0, -0.05, 0);
+    mesh2.rotation.set(-Math.PI / 8, 0, 0);
+    mesh2.scale.set(0.25, 1.5, 0.25);
+    group.add(mesh2);
 
     controller1.add(group.clone());
     controller2.add(group.clone());
