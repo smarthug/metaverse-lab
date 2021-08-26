@@ -41,6 +41,7 @@ export default function Main() {
     renderer = new THREE.WebGLRenderer({
       antialias: true,
       canvas: canvasRef.current,
+      logarithmicDepthBuffer: true
     });
     renderer.xr.enabled = true;
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -52,7 +53,8 @@ export default function Main() {
     var material = new THREE.MeshNormalMaterial();
     cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
-    camera.position.z = 5;
+    camera.position.y = 150;
+    camera.position.z = 150;
 
     cameraControls = new CameraControls(camera, renderer.domElement);
 
@@ -94,10 +96,10 @@ export default function Main() {
     );
 
     water.rotation.x = - Math.PI / 2;
-        const waterBodyMat = new THREE.MeshBasicMaterial({transparent:true, opacity:0.35,color:0x49ef4})
+        const waterBodyMat = new THREE.MeshBasicMaterial({transparent:true, opacity:0.62,color:0x3b9194})
     const waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat )
 
-    waterBody.position.y = -51
+    waterBody.position.y = -50.01
 
     scene.add(waterBody)
     scene.add( water );
