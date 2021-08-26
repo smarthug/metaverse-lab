@@ -36,7 +36,7 @@ export default function Main() {
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      100000
     );
     renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -72,6 +72,8 @@ export default function Main() {
     // Water
 
     const waterGeometry = new THREE.PlaneGeometry( 100, 100 );
+    // const waterGeometry = new THREE.BoxGeometry( 100, 100,100 );
+    const waterBodyGeo = new THREE.BoxGeometry( 100, 100,100 );
 
     water = new Water(
         waterGeometry,
@@ -92,7 +94,12 @@ export default function Main() {
     );
 
     water.rotation.x = - Math.PI / 2;
+        const waterBodyMat = new THREE.MeshBasicMaterial({transparent:true, opacity:0.35,color:0x49ef4})
+    const waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat )
 
+    waterBody.position.y = -51
+
+    scene.add(waterBody)
     scene.add( water );
 
     // Skybox
