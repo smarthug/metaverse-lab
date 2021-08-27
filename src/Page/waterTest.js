@@ -213,6 +213,10 @@ export default function Main() {
       }}
       ref={containerRef}
     >
+      <h1 style={{
+        position:"absolute",
+        color:"white"
+      }}>Press 1 or 2</h1>
       <canvas ref={canvasRef} />
       <div ref={vrButtonConRef}></div>
     </div>
