@@ -7,10 +7,16 @@ import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
 import { Water } from "three/examples/jsm/objects/Water.js";
 import { Sky } from "three/examples/jsm/objects/Sky.js";
 
+import {installFuncHotkey} from 'use-github-hotkey'
+
+import {TWEEN} from 'three/examples/jsm/libs/tween.module.min'
+
 // let container, stats;
 // let camera, scene, renderer;
 // let controls, water, sun, mesh;
-let  water, sun, mesh;
+let  water, sun;
+let waterBody
+let waterGroup
 
 // import { resizer, SceneSetUp } from "../Utils/utils";
 
@@ -27,8 +33,45 @@ export default function Main() {
     Init();
     // Animate();
 
+    installFuncHotkey(WaterLevelControl, "1")
+    installFuncHotkey(WaterLevelControl2, "2")
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function WaterLevelControl(e){
+    console.log(e)
+    console.log("water Level control")
+
+
+    new TWEEN.Tween(waterGroup.position)
+    .to(
+        {
+            // x: p.x,
+            y: 20,
+            // z: p.z,
+        },
+        500
+    ).easing(TWEEN.Easing.Quadratic.Out)
+    .start()
+  }
+
+  function WaterLevelControl2(e){
+    console.log(e)
+    console.log("water Level control")
+
+
+    new TWEEN.Tween(waterGroup.position)
+    .to(
+        {
+            // x: p.x,
+            y: -20,
+            // z: p.z,
+        },
+        500
+    ).easing(TWEEN.Easing.Quadratic.Out)
+    .start()
+  }
 
   function Init() {
     scene = new THREE.Scene();
@@ -72,6 +115,7 @@ export default function Main() {
     sun = new THREE.Vector3();
 
     // Water
+    waterGroup = new THREE.Group();
 
     const waterGeometry = new THREE.PlaneGeometry( 100, 100 );
     // const waterGeometry = new THREE.BoxGeometry( 100, 100,100 );
@@ -97,12 +141,16 @@ export default function Main() {
 
     water.rotation.x = - Math.PI / 2;
         const waterBodyMat = new THREE.MeshBasicMaterial({transparent:true, opacity:0.62,color:0x3b9194})
-    const waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat )
+     waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat )
 
     waterBody.position.y = -50.01
 
-    scene.add(waterBody)
-    scene.add( water );
+    // scene.add(waterBody)
+    // scene.add( water );
+
+    waterGroup.add(waterBody);
+    waterGroup.add(water)
+    scene.add(waterGroup)
 
     // Skybox
 
@@ -150,7 +198,7 @@ export default function Main() {
     // const hasControlsUpdated = cameraControls.update(delta);
     cameraControls.update(delta);
 
-
+    TWEEN.update();
     water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
 
     renderer.render(scene, camera);
