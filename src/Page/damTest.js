@@ -40,8 +40,11 @@ export default function Main() {
     Init();
     // Animate();
 
-    installFuncHotkey(WaterLevelControl(20), "1")
-    installFuncHotkey(WaterLevelControl(-20), "2")
+    installFuncHotkey(WaterLevelControl(5), "1")
+    installFuncHotkey(WaterLevelControl(-5), "2")
+    
+    // pageUpdown 으로 수위 조절 ...
+
 
     installFuncHotkey(ElevationControl(1), "ArrowUp")
     installFuncHotkey(ElevationControl(-1), "ArrowDown")
@@ -49,6 +52,7 @@ export default function Main() {
     installFuncHotkey(AzimuthControl(-1), "ArrowLeft")
 
     Loader("models/monticello_dam/scene.gltf", scene, (gltf) => {
+        gltf.position.set(0, -650,-600)
         gltf.scale.multiplyScalar(100)
     })
 
@@ -66,7 +70,7 @@ export default function Main() {
     .to(
         {
             // x: p.x,
-            y: value,
+            y: waterGroup.position.y+value,
             // z: p.z,
         },
         500
@@ -107,8 +111,11 @@ export default function Main() {
     var material = new THREE.MeshNormalMaterial();
     cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
-    camera.position.y = 150;
-    camera.position.z = 150;
+    // camera.position.y = 150;
+    // camera.position.z = 150;
+
+    camera.position.y = 30;
+    camera.position.z = 30;
 
     cameraControls = new CameraControls(camera, renderer.domElement);
 
@@ -128,9 +135,9 @@ export default function Main() {
     // Water
     waterGroup = new THREE.Group();
 
-    const waterGeometry = new THREE.PlaneGeometry( 100, 100 );
+    const waterGeometry = new THREE.PlaneGeometry( 1000, 1000 );
     // const waterGeometry = new THREE.BoxGeometry( 100, 100,100 );
-    const waterBodyGeo = new THREE.BoxGeometry( 100, 100,100 );
+    const waterBodyGeo = new THREE.BoxGeometry( 1000, 100,1000 );
 
     water = new Water(
         waterGeometry,
