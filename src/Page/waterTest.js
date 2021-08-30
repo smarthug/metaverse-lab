@@ -19,6 +19,9 @@ let  water, sun;
 let waterBody
 let waterGroup
 
+let elevationController
+let azimuthController
+
 // import { resizer, SceneSetUp } from "../Utils/utils";
 
 CameraControls.install({ THREE: THREE });
@@ -34,22 +37,27 @@ export default function Main() {
     Init();
     // Animate();
 
-    installFuncHotkey(WaterLevelControl, "1")
-    installFuncHotkey(WaterLevelControl2, "2")
+    installFuncHotkey(WaterLevelControl(20), "1")
+    installFuncHotkey(WaterLevelControl(-20), "2")
+
+    installFuncHotkey(ElevationControl(1), "ArrowUp")
+    installFuncHotkey(ElevationControl(-1), "ArrowDown")
+    installFuncHotkey(AzimuthControl(1), "ArrowRight")
+    installFuncHotkey(AzimuthControl(-1), "ArrowLeft")
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function WaterLevelControl(e){
-    console.log(e)
-    console.log("water Level control")
 
 
-    new TWEEN.Tween(waterGroup.position)
+  function WaterLevelControl(value){
+    
+
+    return () => new TWEEN.Tween(waterGroup.position)
     .to(
         {
             // x: p.x,
-            y: 20,
+            y: value,
             // z: p.z,
         },
         500
@@ -57,21 +65,14 @@ export default function Main() {
     .start()
   }
 
-  function WaterLevelControl2(e){
-    console.log(e)
-    console.log("water Level control")
+  function ElevationControl(value){
 
+    return () => elevationController.setValue(elevationController.getValue()+value)
+  }
 
-    new TWEEN.Tween(waterGroup.position)
-    .to(
-        {
-            // x: p.x,
-            y: -20,
-            // z: p.z,
-        },
-        500
-    ).easing(TWEEN.Easing.Quadratic.Out)
-    .start()
+  function AzimuthControl(value){
+
+    return () => azimuthController.setValue(azimuthController.getValue()+value)
   }
 
   function Init() {
@@ -198,10 +199,11 @@ export default function Main() {
     const gui = new GUI();
 
     const folderSky = gui.addFolder( 'Sky' );
-    folderSky.add( parameters, 'elevation', 0, 90, 0.1 ).onChange( updateSun );
-    folderSky.add( parameters, 'azimuth', - 180, 180, 0.1 ).onChange( updateSun );
+    elevationController = folderSky.add( parameters, 'elevation', 0, 90, 0.1 ).onChange( updateSun );
+    azimuthController = folderSky.add( parameters, 'azimuth', - 180, 180, 0.1 ).onChange( updateSun );
     folderSky.open();
 
+    //controller.setValue(newValue)
     // const waterUniforms = water.material.uniforms;
 
     // const folderWater = gui.addFolder( 'Water' );
