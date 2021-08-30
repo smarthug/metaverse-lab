@@ -5,3 +5,4 @@
 
 export * as HotkeyUIControl from './hotkeyUIControl'
 export * as WaterTest from './waterTest'
+export * as DamTest from './damTest'
