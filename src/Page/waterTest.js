@@ -10,6 +10,7 @@ import { Sky } from "three/examples/jsm/objects/Sky.js";
 import {installFuncHotkey} from 'use-github-hotkey'
 
 import {TWEEN} from 'three/examples/jsm/libs/tween.module.min'
+import {GUI} from 'dat.gui'
 
 // let container, stats;
 // let camera, scene, renderer;
@@ -131,16 +132,17 @@ export default function Main() {
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
             } ),
-            sunDirection: new THREE.Vector3(),
+            // sunDirection: new THREE.Vector3(),
+            sunDirection: new THREE.Vector3(100, 100, 100),
             sunColor: 0xffffff,
             waterColor: 0x001e0f,
             distortionScale: 3.7,
             fog: scene.fog !== undefined
         }
     );
-
+//0x7F7F7F
     water.rotation.x = - Math.PI / 2;
-        const waterBodyMat = new THREE.MeshBasicMaterial({transparent:true, opacity:0.62,color:0x3b9194})
+        const waterBodyMat = new THREE.MeshBasicMaterial({transparent:true, opacity:0.62,color:0x001e0f})
      waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat )
 
     waterBody.position.y = -50.01
@@ -188,6 +190,24 @@ export default function Main() {
     }
 
     updateSun();
+
+
+
+    // GUI
+
+    const gui = new GUI();
+
+    const folderSky = gui.addFolder( 'Sky' );
+    folderSky.add( parameters, 'elevation', 0, 90, 0.1 ).onChange( updateSun );
+    folderSky.add( parameters, 'azimuth', - 180, 180, 0.1 ).onChange( updateSun );
+    folderSky.open();
+
+    // const waterUniforms = water.material.uniforms;
+
+    // const folderWater = gui.addFolder( 'Water' );
+    // folderWater.add( waterUniforms.distortionScale, 'value', 0, 8, 0.1 ).name( 'distortionScale' );
+    // folderWater.add( waterUniforms.size, 'value', 0.1, 10, 0.1 ).name( 'size' );
+    // folderWater.open();
   }
 
   function Animate() {

@@ -7,6 +7,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "camera-controls": "^1.30.0",
+    "dat.gui": "^0.7.7",
     "ipfs-core": "^0.10.3",
     "ipfs-http-client": "^52.0.1",
     "react": "^17.0.2",
