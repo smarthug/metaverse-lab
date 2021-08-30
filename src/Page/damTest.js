@@ -159,7 +159,7 @@ export default function Main() {
     );
 //0x7F7F7F
     water.rotation.x = - Math.PI / 2;
-        const waterBodyMat = new THREE.MeshBasicMaterial({transparent:true, opacity:0.62,color:0x001e0f})
+        const waterBodyMat = new THREE.MeshBasicMaterial({transparent:true, opacity:0.62,color:0x001e0f, side:THREE.DoubleSide})
      waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat )
 
     waterBody.position.y = -50.01

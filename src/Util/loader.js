@@ -2,7 +2,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
-
+// promise 기반으로 전환 ... 
 export default function Loader(path, root, postProcess = () => { }) {
   const loader = new GLTFLoader()
     .setDRACOLoader(new DRACOLoader().setDecoderPath("assets/wasm/"))
