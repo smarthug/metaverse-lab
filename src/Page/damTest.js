@@ -25,6 +25,8 @@ let waterGroup
 let elevationController
 let azimuthController
 
+let cameraRig;
+
 // import { resizer, SceneSetUp } from "../Utils/utils";
 
 CameraControls.install({ THREE: THREE });
@@ -51,6 +53,8 @@ export default function Main() {
     installFuncHotkey(AzimuthControl(1), "ArrowRight")
     installFuncHotkey(AzimuthControl(-1), "ArrowLeft")
 
+    installFuncHotkey(TempTeleport, "t")
+
     Loader("models/monticello_dam/scene.gltf", scene, (gltf) => {
         gltf.position.set(0, -650,-600)
         gltf.scale.multiplyScalar(100)
@@ -60,6 +64,11 @@ export default function Main() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function TempTeleport(){
+    console.log("teleport")
+    cameraRig.position.addScalar(100);
+  }
 
 
 
@@ -122,6 +131,9 @@ export default function Main() {
     vrButtonConRef.current.appendChild(VRButton.createButton(renderer));
 
     renderer.setAnimationLoop(Animate);
+
+    cameraRig = new THREE.Group();
+    cameraRig.add(camera);
 
     // window.addEventListener("resize", () => resizer(camera, renderer));
 
