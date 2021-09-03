@@ -10,20 +10,22 @@ import Axios from 'axios'
 // 일반 인증키 (Decoding)
 // ZxrZfsn3W1SzrPkT25l4PDqkccKegvzS6SJxvHgc3yHTFm0ctdzwIZIkMgZNPwCyDoiNzAWJ4Uz+ihCp+MqmHQ==
 // const serviceKey = "ZxrZfsn3W1SzrPkT25l4PDqkccKegvzS6SJxvHgc3yHTFm0ctdzwIZIkMgZNPwCyDoiNzAWJ4Uz%2BihCp%2BMqmHQ%3D%3D"
+// const url = 'http://opendata.kwater.or.kr/openapi-data/service/pubd/dam/sluicePresentCondition/mnt/list?damcode=2403201&stdt=2021-09-02&eddt=2021-09-02&numOfRows=10&pageNo=undefined&serviceKey=ejdrD89pyah0JlAaICprH0xOAEp0tAxvExhm2p0DT5Ulq2MskjlekFH7kFIAEt6d16gjJ2scGwRSLG4Rr1HUiA=='
+const url = 'http://booster-app.account7172.workers.dev/openapi-data/service/pubd/dam/sluicePresentCondition/mnt/list?damcode=2403201&stdt=2021-09-02&eddt=2021-09-02&numOfRows=10&pageNo=undefined&serviceKey=ejdrD89pyah0JlAaICprH0xOAEp0tAxvExhm2p0DT5Ulq2MskjlekFH7kFIAEt6d16gjJ2scGwRSLG4Rr1HUiA=='
 export default function Main() {
     const [data, setData] = useState([])
 
     useEffect(() => {
-        // Axios.get(`https://opendata.kwater.or.kr:443/openapi-data/service/pubd/dam/sluicePresentCondition/hour/list?_type=json&damcode=2022510&stdt=2021-10-01&eddt=2021-10-03&numOfRows=10&pageNo=1&serviceKey=${serviceKey}`).then((res)=>{
-        //     console.log(res);
-        // })
-
-        Axios.get(`http://localhost:8000`).then((res) => {
+        Axios.get(url).then((res) => {
             console.log(res);
-            console.log(res.data.response.body.items.item)
-            // setData(res.data.response.body.items.item)
-            setData(res.data.response.body.items.item)
         })
+
+        // Axios.get(`http://localhost:8000`).then((res) => {
+        //     console.log(res);
+        //     console.log(res.data.response.body.items.item)
+        //     // setData(res.data.response.body.items.item)
+        //     setData(res.data.response.body.items.item)
+        // })
     }, [])
 
 

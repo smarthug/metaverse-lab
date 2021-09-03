@@ -7,10 +7,10 @@ import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
 import { Water } from "three/examples/jsm/objects/Water.js";
 import { Sky } from "three/examples/jsm/objects/Sky.js";
 
-import {installFuncHotkey} from 'use-github-hotkey'
+import { installFuncHotkey } from 'use-github-hotkey'
 
-import {TWEEN} from 'three/examples/jsm/libs/tween.module.min'
-import {GUI} from 'dat.gui'
+import { TWEEN } from 'three/examples/jsm/libs/tween.module.min'
+import { GUI } from 'dat.gui'
 
 import Loader from '../Util/loader'
 import Light from '../Util/light'
@@ -18,7 +18,7 @@ import Light from '../Util/light'
 // let container, stats;
 // let camera, scene, renderer;
 // let controls, water, sun, mesh;
-let  water, sun;
+let water, sun;
 let waterBody
 let waterGroup
 
@@ -44,7 +44,7 @@ export default function Main() {
 
     installFuncHotkey(WaterLevelControl(5), "1")
     installFuncHotkey(WaterLevelControl(-5), "2")
-    
+
     // pageUpdown 으로 수위 조절 ...
 
 
@@ -55,46 +55,56 @@ export default function Main() {
 
     installFuncHotkey(TempTeleport, "t")
 
-    Loader("models/monticello_dam/scene.gltf", scene, (gltf) => {
-        gltf.position.set(0, -650,-600)
-        gltf.scale.multiplyScalar(100)
+    //     Loader("models/monticello_dam/scene.gltf", scene, (gltf) => {
+    //         gltf.position.set(0, -650,-600)
+    //         gltf.scale.multiplyScalar(100)
+    //     })
+
+    //     root.add(scene);
+    // postProcess(scene);
+
+    Loader("models/monticello_dam/scene.gltf").then((gltf) => {
+      scene.add(gltf)
+      gltf.position.set(0, -650, -600)
+      gltf.scale.multiplyScalar(100)
     })
+
 
     Light(scene)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function TempTeleport(){
+  function TempTeleport() {
     console.log("teleport")
     cameraRig.position.addScalar(100);
   }
 
 
 
-  function WaterLevelControl(value){
-    
+  function WaterLevelControl(value) {
+
 
     return () => new TWEEN.Tween(waterGroup.position)
-    .to(
+      .to(
         {
-            // x: p.x,
-            y: waterGroup.position.y+value,
-            // z: p.z,
+          // x: p.x,
+          y: waterGroup.position.y + value,
+          // z: p.z,
         },
         500
-    ).easing(TWEEN.Easing.Quadratic.Out)
-    .start()
+      ).easing(TWEEN.Easing.Quadratic.Out)
+      .start()
   }
 
-  function ElevationControl(value){
+  function ElevationControl(value) {
 
-    return () => elevationController.setValue(elevationController.getValue()+value)
+    return () => elevationController.setValue(elevationController.getValue() + value)
   }
 
-  function AzimuthControl(value){
+  function AzimuthControl(value) {
 
-    return () => azimuthController.setValue(azimuthController.getValue()+value)
+    return () => azimuthController.setValue(azimuthController.getValue() + value)
   }
 
   function Init() {
@@ -147,32 +157,32 @@ export default function Main() {
     // Water
     waterGroup = new THREE.Group();
 
-    const waterGeometry = new THREE.PlaneGeometry( 1000, 1000 );
+    const waterGeometry = new THREE.PlaneGeometry(1000, 1000);
     // const waterGeometry = new THREE.BoxGeometry( 100, 100,100 );
-    const waterBodyGeo = new THREE.BoxGeometry( 1000, 100,1000 );
+    const waterBodyGeo = new THREE.BoxGeometry(1000, 100, 1000);
 
     water = new Water(
-        waterGeometry,
-        {
-            textureWidth: 512,
-            textureHeight: 512,
-            waterNormals: new THREE.TextureLoader().load( 'textures/waternormals.jpg', function ( texture ) {
+      waterGeometry,
+      {
+        textureWidth: 512,
+        textureHeight: 512,
+        waterNormals: new THREE.TextureLoader().load('textures/waternormals.jpg', function (texture) {
 
-                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
-            } ),
-            // sunDirection: new THREE.Vector3(),
-            sunDirection: new THREE.Vector3(100, 100, 100),
-            sunColor: 0xffffff,
-            waterColor: 0x001e0f,
-            distortionScale: 3.7,
-            fog: scene.fog !== undefined
-        }
+        }),
+        // sunDirection: new THREE.Vector3(),
+        sunDirection: new THREE.Vector3(100, 100, 100),
+        sunColor: 0xffffff,
+        waterColor: 0x001e0f,
+        distortionScale: 3.7,
+        fog: scene.fog !== undefined
+      }
     );
-//0x7F7F7F
+    //0x7F7F7F
     water.rotation.x = - Math.PI / 2;
-        const waterBodyMat = new THREE.MeshBasicMaterial({transparent:true, opacity:0.62,color:0x001e0f, side:THREE.DoubleSide})
-     waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat )
+    const waterBodyMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.62, color: 0x001e0f, side: THREE.DoubleSide })
+    waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat)
 
     waterBody.position.y = -50.01
 
@@ -186,35 +196,35 @@ export default function Main() {
     // Skybox
 
     const sky = new Sky();
-    sky.scale.setScalar( 10000 );
-    scene.add( sky );
+    sky.scale.setScalar(10000);
+    scene.add(sky);
 
     const skyUniforms = sky.material.uniforms;
 
-    skyUniforms[ 'turbidity' ].value = 10;
-    skyUniforms[ 'rayleigh' ].value = 2;
-    skyUniforms[ 'mieCoefficient' ].value = 0.005;
-    skyUniforms[ 'mieDirectionalG' ].value = 0.8;
+    skyUniforms['turbidity'].value = 10;
+    skyUniforms['rayleigh'].value = 2;
+    skyUniforms['mieCoefficient'].value = 0.005;
+    skyUniforms['mieDirectionalG'].value = 0.8;
 
 
     const parameters = {
-        elevation: 2,
-        azimuth: 180
+      elevation: 2,
+      azimuth: 180
     };
 
-    const pmremGenerator = new THREE.PMREMGenerator( renderer );
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
 
     function updateSun() {
 
-        const phi = THREE.MathUtils.degToRad( 90 - parameters.elevation );
-        const theta = THREE.MathUtils.degToRad( parameters.azimuth );
+      const phi = THREE.MathUtils.degToRad(90 - parameters.elevation);
+      const theta = THREE.MathUtils.degToRad(parameters.azimuth);
 
-        sun.setFromSphericalCoords( 1, phi, theta );
+      sun.setFromSphericalCoords(1, phi, theta);
 
-        sky.material.uniforms[ 'sunPosition' ].value.copy( sun );
-        water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
+      sky.material.uniforms['sunPosition'].value.copy(sun);
+      water.material.uniforms['sunDirection'].value.copy(sun).normalize();
 
-        scene.environment = pmremGenerator.fromScene( sky ).texture;
+      scene.environment = pmremGenerator.fromScene(sky).texture;
 
     }
 
@@ -226,9 +236,9 @@ export default function Main() {
 
     const gui = new GUI();
 
-    const folderSky = gui.addFolder( 'Sky' );
-    elevationController = folderSky.add( parameters, 'elevation', 0, 90, 0.1 ).onChange( updateSun );
-    azimuthController = folderSky.add( parameters, 'azimuth', - 180, 180, 0.1 ).onChange( updateSun );
+    const folderSky = gui.addFolder('Sky');
+    elevationController = folderSky.add(parameters, 'elevation', 0, 90, 0.1).onChange(updateSun);
+    azimuthController = folderSky.add(parameters, 'azimuth', - 180, 180, 0.1).onChange(updateSun);
     folderSky.open();
 
     //controller.setValue(newValue)
@@ -249,7 +259,7 @@ export default function Main() {
     cameraControls.update(delta);
 
     TWEEN.update();
-    water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
+    water.material.uniforms['time'].value += 1.0 / 60.0;
 
     renderer.render(scene, camera);
   }
@@ -264,8 +274,8 @@ export default function Main() {
       ref={containerRef}
     >
       <h1 style={{
-        position:"absolute",
-        color:"white"
+        position: "absolute",
+        color: "white"
       }}>Press 1 or 2</h1>
       <canvas ref={canvasRef} />
       <div ref={vrButtonConRef}></div>
