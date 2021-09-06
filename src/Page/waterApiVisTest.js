@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import React, { useEffect, useRef } from "react";
+import Axios from 'axios'
 
 import CameraControls from "camera-controls";
 import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
@@ -14,6 +15,8 @@ import { GUI } from 'dat.gui'
 
 import Loader from '../Util/loader'
 import Light from '../Util/light'
+
+const url = 'http://booster-app.account7172.workers.dev/openapi-data/service/pubd/dam/sluicePresentCondition/mnt/list?damcode=2403201&stdt=2021-09-02&eddt=2021-09-02&numOfRows=10&pageNo=undefined&serviceKey=ejdrD89pyah0JlAaICprH0xOAEp0tAxvExhm2p0DT5Ulq2MskjlekFH7kFIAEt6d16gjJ2scGwRSLG4Rr1HUiA=='
 
 // let container, stats;
 // let camera, scene, renderer;
@@ -58,6 +61,7 @@ export default function Main() {
     
 
     Loader("https://ipfs.io/ipfs/QmRayg561oGQiL8jMHmy5g1ZWeACQ7gHHf4DdNZ84tU3Lp").then((gltf) => {
+      console.log(gltf)
       scene.add(gltf)
       gltf.position.set(0, -650, -600)
       gltf.scale.multiplyScalar(100)
@@ -65,6 +69,12 @@ export default function Main() {
 
 
     Light(scene)
+
+
+    Axios.get(url).then((res) => {
+        console.log(res);
+        // setData(res.data.response.body.items.item)
+    })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

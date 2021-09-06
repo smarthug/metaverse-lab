@@ -18,6 +18,7 @@ export default function Main() {
     useEffect(() => {
         Axios.get(url).then((res) => {
             console.log(res);
+            setData(res.data.response.body.items.item)
         })
 
         // Axios.get(`http://localhost:8000`).then((res) => {
