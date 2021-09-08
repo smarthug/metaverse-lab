@@ -10,3 +10,5 @@
 
 export * as WaterAPIVisualTest from './waterApiVisTest'
 export * as Rain from './rain'
+
+export * as MockPlayer from './mockPlayerTest'
