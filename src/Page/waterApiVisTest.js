@@ -42,7 +42,7 @@ const defaultChart = {
 
   series: [{
     name: "총방류량 (㎥/sec)",
-    data: [0.000, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.020]
+    data: [0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010]
   }],
   options: {
     chart: {
@@ -119,7 +119,7 @@ export default function Main() {
   const [data, setData] = useState(
     [{
       name: 'series-1',
-      data: [0.000, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.020]
+      data: [0.000, 0.010, 0.010, 0.010, 10.010, 0.010, 0.010, 0.010, 0.010, 100.010]
     }]
   )
   useEffect(() => {
@@ -163,10 +163,10 @@ export default function Main() {
         return v.totdcwtrqy
       })
       console.log(data)
-      setData([{
-        name: 'series-1',
-        data: data
-      }])
+      // setData([{
+      //   name: 'series-1',
+      //   data: data
+      // }])
       // setData(res.data.response.body.items.item)
     })
 
@@ -392,10 +392,10 @@ export default function Main() {
       }}
       ref={containerRef}
     >
-      {/* <Chart options={defaultChart.options}
+      <Chart options={defaultChart.options}
         // series={defaultChart.series}
         series={data}
-        type="line" width={500} height={320} /> */}
+        type="line" width={500} height={320} />
       {/* <img
         alt="Grapefruit slice atop a pile of other slices"
         src="img/chart.png"
