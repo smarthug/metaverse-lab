@@ -13,3 +13,7 @@ export * as Rain from './rain'
 
 // export * as MockPlayer from './mockPlayerTest'
 export * as TeleportTutorial from './tutorialTest'
+
+export * as ErrorProof from './errorProof'
+
+export * as PlayGround from './playGround'
