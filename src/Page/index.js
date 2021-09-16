@@ -15,3 +15,6 @@ export * as Rain from './rain'
 export * as TeleportTutorial from './tutorialTest'
 
 export * as DamTeleport from './damTeleport'
+export * as ErrorProof from './errorProof'
+
+export * as PlayGround from './playGround'
