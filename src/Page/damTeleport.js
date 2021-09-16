@@ -16,8 +16,11 @@ import { GUI } from 'dat.gui'
 import Loader from '../Util/loader'
 import Light from '../Util/light'
 
+import Teleport from '../Util/teleport'
+
 import { InteractiveGroup } from 'three/examples/jsm/interactive/InteractiveGroup.js';
 import { HTMLMesh } from 'three/examples/jsm/interactive/HTMLMesh'
+import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory";
 
 
 const loader = new THREE.TextureLoader();
@@ -32,7 +35,7 @@ const cubeMaterials = [
     onlyMeshNormalMat, //back side
 ];
 
-
+let teleport = { update: () => { } }
 
 let water, sun;
 let waterBody
@@ -42,6 +45,12 @@ let elevationController
 let azimuthController
 
 let cameraRig;
+
+let controller0;
+let controller1;
+
+let playerHandHelper = new THREE.Group();
+let destHandHelper = new THREE.Group();
 
 // import { resizer, SceneSetUp } from "../Utils/utils";
 
@@ -60,6 +69,7 @@ export default function Main() {
         Init();
         EnvSetUp();
         // teleport setup func needed
+        TeleportSetUp()
         installFuncHotkey(WaterLevelControl(5), "1")
         installFuncHotkey(WaterLevelControl(-5), "2")
         installFuncHotkey(TempTeleport, "t")
@@ -72,6 +82,102 @@ export default function Main() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+
+    function TeleportSetUp() {
+
+        // cameraRig = new THREE.Group();
+        controller0 = renderer.xr.getController(0);
+        controller1 = renderer.xr.getController(1);
+
+        // cameraRig.add(camera);
+        cameraRig.add(controller0)
+        cameraRig.add(controller1)
+
+        const controllerModelFactory = new XRControllerModelFactory();
+
+        let controllerGrip0 = renderer.xr.getControllerGrip(0);
+        controllerGrip0.add(
+            controllerModelFactory.createControllerModel(controllerGrip0)
+        )
+
+        let controllerGrip1 = renderer.xr.getControllerGrip(1);
+        controllerGrip1.add(
+            controllerModelFactory.createControllerModel(controllerGrip1)
+        )
+
+        cameraRig.add(controllerGrip0)
+        cameraRig.add(controllerGrip1)
+
+
+        const fontLoader = new THREE.FontLoader();
+
+
+
+        //`${}/model/${models[tp]}.gltf`
+        //`${}/fonts/helvetiker_regular.typeface.jsn`
+
+        fontLoader.load(
+            `fonts/helvetiker_regular.typeface.json`,
+            font => {
+                const geometry = new THREE.TextGeometry("From", {
+                    font: font,
+                    size: 0.05,
+                    height: 0.05,
+                });
+
+                playerHandHelper.add(
+                    new THREE.Mesh(geometry, new THREE.MeshNormalMaterial())
+                );
+
+                const geometry2 = new THREE.TextGeometry("To", {
+                    font: font,
+                    size: 0.05,
+                    height: 0.05,
+                });
+
+                destHandHelper.add(
+                    new THREE.Mesh(geometry2, new THREE.MeshNormalMaterial())
+                );
+            }
+        );
+
+
+
+
+
+
+        // const session = renderer.xr.getSession();
+        // session.end().then(() => {
+        //     interactiveGroup.dispose();
+
+        //     spatialControls.dispose();
+
+        //     // scene.remove(interactiveGroup)
+        //     cameraRig.remove(interactiveGroup);
+        //     // interactiveGroup.removeFromParent();
+        // });
+    }
+
+    function preXR() {
+        teleport = new Teleport(
+            renderer,
+            cameraRig,
+            controller0,
+            controller1,
+            {
+                // destMarker: new THREE.Group(),
+                rightHanded: true,
+                playerHandHelper: playerHandHelper,
+                destHandHelper: destHandHelper,
+                multiplyScalar: 20,
+            }
+        );
+    }
+
+    function postXR() {
+
+    }
 
     function TempTeleport() {
         console.log("teleport")
@@ -186,7 +292,7 @@ export default function Main() {
 
         // GUI
 
-        const gui = new GUI({autoPlace:false});
+        const gui = new GUI({ autoPlace: false });
 
         const folderSky = gui.addFolder('Sky');
         elevationController = folderSky.add(parameters, 'elevation', 0, 90, 0.1).onChange(updateSun);
@@ -244,13 +350,25 @@ export default function Main() {
 
         cameraControls = new CameraControls(camera, renderer.domElement);
 
-        vrButtonConRef.current.appendChild(VRButton.createButton(renderer));
+        let vrBtnElem = VRButton.createButton(renderer)
+        // vrBtnElem.addEventListener('click', () => {
+        //     console.log("hello XR")
+        // })
+
+        vrBtnElem.addEventListener('click', preXR)
+
+        vrButtonConRef.current.appendChild(vrBtnElem);
 
         renderer.setAnimationLoop(Animate);
 
         cameraRig = new THREE.Group();
-        cameraRig.add(camera);
+        scene.add(cameraRig);
+        controller0 = renderer.xr.getController(0);
+        controller1 = renderer.xr.getController(1);
 
+        cameraRig.add(camera);
+        cameraRig.add(controller0)
+        cameraRig.add(controller1)
         // window.addEventListener("resize", () => resizer(camera, renderer));
 
 
@@ -265,6 +383,7 @@ export default function Main() {
         // const hasControlsUpdated = cameraControls.update(delta);
         cameraControls.update(delta);
 
+        teleport.update();
         TWEEN.update();
         water.material.uniforms['time'].value += 1.0 / 60.0;
 

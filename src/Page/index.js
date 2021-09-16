@@ -12,9 +12,10 @@ export * as WaterAPIVisualTest from './waterApiVisTest'
 export * as Rain from './rain'
 
 // export * as MockPlayer from './mockPlayerTest'
-export * as TeleportTutorial from './tutorialTest'
+// export * as TeleportTutorial from './tutorialTest'
 
-export * as DamTeleport from './damTeleport'
 export * as ErrorProof from './errorProof'
 
 export * as PlayGround from './playGround'
+
+export * as DamTeleport from './damTeleport'
