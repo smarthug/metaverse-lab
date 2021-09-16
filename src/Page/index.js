@@ -13,3 +13,5 @@ export * as Rain from './rain'
 
 // export * as MockPlayer from './mockPlayerTest'
 export * as TeleportTutorial from './tutorialTest'
+
+export * as DamTeleport from './damTeleport'
