@@ -74,6 +74,8 @@ export default function Main() {
         installFuncHotkey(WaterLevelControl(-5), "2")
         installFuncHotkey(TempTeleport, "t")
 
+        installFuncHotkey(postXR, "Escape")
+
         // installFuncHotkey(ElevationControl(1), "ArrowUp")
 
 
@@ -147,19 +149,11 @@ export default function Main() {
 
 
 
-        // const session = renderer.xr.getSession();
-        // session.end().then(() => {
-        //     interactiveGroup.dispose();
 
-        //     spatialControls.dispose();
-
-        //     // scene.remove(interactiveGroup)
-        //     cameraRig.remove(interactiveGroup);
-        //     // interactiveGroup.removeFromParent();
-        // });
     }
 
     function preXR() {
+        cameraControls.dispose()
         teleport = new Teleport(
             renderer,
             cameraRig,
@@ -173,9 +167,41 @@ export default function Main() {
                 multiplyScalar: 20,
             }
         );
+
+        // const session = renderer.xr.getSession();
+        // session.addEventListener('end',postXR);
     }
 
     function postXR() {
+        cameraControls.dispose()
+        cameraRig.position.set(0,0,0)
+        // esc 누르면 호출되는 ...
+        const session = renderer.xr.getSession();
+        session.end().then(() => {
+            teleport.dispose();
+            //다끝나고 누를까 ...
+            // 새 카메라 ? 
+            // camera.dipose();
+            camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                100000
+            );
+            camera.position.y = 30;
+            camera.position.z = 30;
+            cameraRig.add(camera)
+            cameraControls = new CameraControls(camera, renderer.domElement);
+            // camera controls 위치 디폴트로 이동시키기 ... 
+
+            // e 버튼 누르면 나오는 함수 여기서 
+
+            // scene.remove(interactiveGroup)
+            // cameraRig.remove(interactiveGroup);
+            // interactiveGroup.removeFromParent();
+        });
+
+
 
     }
 

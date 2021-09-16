@@ -15,6 +15,12 @@ const directionVec = new THREE.Vector3();
 
 const tmp = new THREE.Vector3();
 
+// mock dest marker
+const cone = new THREE.Mesh(
+    new THREE.ConeGeometry(0.5, 1.5, 32),
+    new THREE.MeshNormalMaterial({ wireframe: false })
+);
+
 // test 필요 , 일치화 된듯 ...
 // const isOculusBrowser = /OculusBrowser/.test(navigator.userAgent);
 const isOculusBrowser = false;
@@ -72,10 +78,7 @@ export default class Teleport extends THREE.EventDispatcher {
 
         if (destMarker === undefined) {
             destMarker = new THREE.Object3D();
-            const cone = new THREE.Mesh(
-                new THREE.ConeGeometry(0.5, 1.5, 32),
-                new THREE.MeshNormalMaterial({ wireframe: false })
-            );
+            
             cone.rotateX((90 * Math.PI) / 180);
             destMarker.add(cone);
             this._cameraRig.parent.add(destMarker);
@@ -318,6 +321,10 @@ export default class Teleport extends THREE.EventDispatcher {
     dispose() {
         this._cameraRig.parent.remove(this._helperLine);
         this._cameraRig.parent.remove(this._helperLine2);
+
+        // destmarker 도 없애기 ... 걍 remove 만 하자 ... 
+        // destMarker
+        this._cameraRig.parent.remove(this._destMarker);
     }
 
     // onSelectEnd() {
