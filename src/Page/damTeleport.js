@@ -44,7 +44,7 @@ let waterGroup
 let elevationController
 let azimuthController
 
-let cameraRig;
+let cameraRig = new THREE.Group();;
 
 let controller0;
 let controller1;
@@ -74,7 +74,10 @@ export default function Main() {
         installFuncHotkey(WaterLevelControl(-5), "2")
         installFuncHotkey(TempTeleport, "t")
 
+        installFuncHotkey(EnterXRHotkey, "x r")
         installFuncHotkey(postXR, "Escape")
+
+        installFuncHotkey(Logger, 'l')
 
         // installFuncHotkey(ElevationControl(1), "ArrowUp")
 
@@ -84,6 +87,10 @@ export default function Main() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    function Logger() {
+        console.log(scene);
+    }
 
 
     function TeleportSetUp() {
@@ -152,6 +159,11 @@ export default function Main() {
 
     }
 
+    function EnterXRHotkey() {
+        preXR()
+        document.getElementById("VRButton").click();
+    }
+
     function preXR() {
         cameraControls.dispose()
         teleport = new Teleport(
@@ -165,6 +177,7 @@ export default function Main() {
                 playerHandHelper: playerHandHelper,
                 destHandHelper: destHandHelper,
                 multiplyScalar: 20,
+                scene:scene
             }
         );
 
@@ -344,7 +357,7 @@ export default function Main() {
     function Init() {
         THREE.Cache.enabled = true
         scene = new THREE.Scene();
-
+        scene.add(cameraRig);
 
         camera = new THREE.PerspectiveCamera(
             75,
@@ -387,8 +400,8 @@ export default function Main() {
 
         renderer.setAnimationLoop(Animate);
 
-        cameraRig = new THREE.Group();
-        scene.add(cameraRig);
+        
+        
         controller0 = renderer.xr.getController(0);
         controller1 = renderer.xr.getController(1);
 

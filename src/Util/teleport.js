@@ -21,6 +21,8 @@ const cone = new THREE.Mesh(
     new THREE.MeshNormalMaterial({ wireframe: false })
 );
 
+
+
 // test 필요 , 일치화 된듯 ...
 // const isOculusBrowser = /OculusBrowser/.test(navigator.userAgent);
 const isOculusBrowser = false;
@@ -34,6 +36,8 @@ function TranslateHelperGeometry() {
     return geometry;
 }
 
+const lineGeo = TranslateHelperGeometry()
+
 const matHelper = new THREE.MeshBasicMaterial({
     depthTest: false,
     depthWrite: false,
@@ -42,6 +46,9 @@ const matHelper = new THREE.MeshBasicMaterial({
     fog: false,
     toneMapped: false,
 });
+
+const lineMesh = new THREE.Line(lineGeo, matHelper);
+lineMesh.name = 'the fuck'
 
 export default class Teleport extends THREE.EventDispatcher {
     constructor(
@@ -55,10 +62,11 @@ export default class Teleport extends THREE.EventDispatcher {
             playerHandHelper,
             destHandHelper,
             multiplyScalar = 3,
+            scene
         } = {}
     ) {
         super();
-
+        this._scene = scene;
         this._xr = renderer.xr;
 
         this._controller0 = controller0;
@@ -114,12 +122,12 @@ export default class Teleport extends THREE.EventDispatcher {
         // teleport distance multiply scalar
         this._multiplyScalar = multiplyScalar;
 
-        this._helperLine = new THREE.Line(TranslateHelperGeometry(), matHelper);
-        this._helperLine2 = this._helperLine.clone();
+        this._helperLine = lineMesh.clone()
+        this._helperLine2 = lineMesh.clone();
 
         this._cameraRig.parent.add(this._helperLine);
         this._cameraRig.parent.add(this._helperLine2);
-
+// 
         this.onSelectEnd = () => {
             this.teleport();
         };
@@ -319,8 +327,11 @@ export default class Teleport extends THREE.EventDispatcher {
     }
 
     dispose() {
-        this._cameraRig.parent.remove(this._helperLine);
-        this._cameraRig.parent.remove(this._helperLine2);
+        this._scene.remove(this._helperLine);
+        this._scene.remove(this._helperLine2);
+
+        // this._cameraRig.parent.remove(this._helperLine);
+        // this._cameraRig.parent.remove(this._helperLine2);
 
         // destmarker 도 없애기 ... 걍 remove 만 하자 ... 
         // destMarker
