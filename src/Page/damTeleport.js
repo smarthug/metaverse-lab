@@ -177,7 +177,7 @@ export default function Main() {
                 playerHandHelper: playerHandHelper,
                 destHandHelper: destHandHelper,
                 multiplyScalar: 20,
-                scene:scene
+                scene: scene
             }
         );
 
@@ -187,7 +187,7 @@ export default function Main() {
 
     function postXR() {
         cameraControls.dispose()
-        cameraRig.position.set(0,0,0)
+        cameraRig.position.set(0, 0, 0)
         // esc 누르면 호출되는 ...
         const session = renderer.xr.getSession();
         session.end().then(() => {
@@ -400,8 +400,8 @@ export default function Main() {
 
         renderer.setAnimationLoop(Animate);
 
-        
-        
+
+
         controller0 = renderer.xr.getController(0);
         controller1 = renderer.xr.getController(1);
 
