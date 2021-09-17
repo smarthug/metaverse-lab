@@ -347,12 +347,22 @@ export default function Main() {
         //     gltf.scale.multiplyScalar(100)
         // })
 
-        Loader("models/mergedDam.glb").then((gltf) => {
+        // Loader("models/mergedDam.glb").then((gltf) => {
+        //     console.log(gltf)
+        //     scene.add(gltf)
+        //     gltf.position.set(50, -650, -600)
+        //     gltf.scale.multiplyScalar(100)
+        // })
+
+
+        Loader("https://ipfs.io/ipfs/QmabJksgNiWHd8YJ5razFpaJAz6VWc2nBTGSNMFLyXV5MJ").then((gltf) => {
             console.log(gltf)
             scene.add(gltf)
             gltf.position.set(50, -650, -600)
             gltf.scale.multiplyScalar(100)
         })
+
+        
 
 
         Light(scene)
