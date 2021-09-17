@@ -191,6 +191,7 @@ export default function Main() {
         // esc 누르면 호출되는 ...
         const session = renderer.xr.getSession();
         session.end().then(() => {
+            console.log("teleport dispose")
             teleport.dispose();
             //다끝나고 누를까 ...
             // 새 카메라 ? 
@@ -339,7 +340,14 @@ export default function Main() {
         folderSky.open();
 
 
-        Loader("https://ipfs.io/ipfs/QmRayg561oGQiL8jMHmy5g1ZWeACQ7gHHf4DdNZ84tU3Lp").then((gltf) => {
+        // Loader("https://ipfs.io/ipfs/QmRayg561oGQiL8jMHmy5g1ZWeACQ7gHHf4DdNZ84tU3Lp").then((gltf) => {
+        //     console.log(gltf)
+        //     scene.add(gltf)
+        //     gltf.position.set(50, -650, -600)
+        //     gltf.scale.multiplyScalar(100)
+        // })
+
+        Loader("models/mergedDam.glb").then((gltf) => {
             console.log(gltf)
             scene.add(gltf)
             gltf.position.set(50, -650, -600)
@@ -349,9 +357,37 @@ export default function Main() {
 
         Light(scene)
 
-        let avatar = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), cubeMaterials);
-        scene.add(avatar)
-        avatar.position.set(0, 5, 0)
+        // let avatar = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), cubeMaterials);
+        // scene.add(avatar)
+        // avatar.position.set(0, 5, 0)
+
+        // Loader("models/avatar2.glb").then((gltf) => {
+        //     scene.add(gltf)
+        //     gltf.position.set(0, 5, 0)
+        //     console.log(gltf)
+        //     // gltf.scale.multiplyScalar(100)
+        // })
+
+
+        Loader("https://d1a370nemizbjq.cloudfront.net/6aea7546-37ef-4653-b4d1-713f9ef67ced.glb").then((gltf) => {
+            scene.add(gltf)
+            gltf.position.set(0, 5, 0)
+            console.log(gltf)
+            // gltf.scale.multiplyScalar(100)
+        })
+
+
+        const dir = new THREE.Vector3(1, 0, 0);
+
+        //normalize the direction vector (convert to vector of length 1)
+        dir.normalize();
+
+        const origin = new THREE.Vector3(0, 0, 0);
+        const length = 1;
+        const hex = 0xffff00;
+
+        const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
+        scene.add(arrowHelper);
     }
 
     function Init() {

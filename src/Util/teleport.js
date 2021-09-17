@@ -85,10 +85,29 @@ export default class Teleport extends THREE.EventDispatcher {
         this._handsOrder = true;
 
         if (destMarker === undefined) {
+            // destMarker = new THREE.Object3D();
+
+            // cone.rotateX((90 * Math.PI) / 180);
+            // destMarker.add(cone);
+            // this._cameraRig.parent.add(destMarker);
+
+
+            const dir = new THREE.Vector3(1, 0, 0);
+
+            //normalize the direction vector (convert to vector of length 1)
+            dir.normalize();
+
+            const origin = new THREE.Vector3(0, 0, 0);
+            const length = 1;
+            const hex = 0xffff00;
+
+            const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
+            // scene.add(arrowHelper);
+
             destMarker = new THREE.Object3D();
-            
-            cone.rotateX((90 * Math.PI) / 180);
-            destMarker.add(cone);
+
+            // cone.rotateX((90 * Math.PI) / 180);
+            destMarker.add(arrowHelper);
             this._cameraRig.parent.add(destMarker);
         }
 
@@ -127,7 +146,7 @@ export default class Teleport extends THREE.EventDispatcher {
 
         this._cameraRig.parent.add(this._helperLine);
         this._cameraRig.parent.add(this._helperLine2);
-// 
+        // 
         this.onSelectEnd = () => {
             this.teleport();
         };
@@ -327,8 +346,12 @@ export default class Teleport extends THREE.EventDispatcher {
     }
 
     dispose() {
+        console.log("really disposed???")
         this._scene.remove(this._helperLine);
         this._scene.remove(this._helperLine2);
+
+        this._helperLine.material.visible = false
+        this._helperLine2.material.visible = false
 
         // this._cameraRig.parent.remove(this._helperLine);
         // this._cameraRig.parent.remove(this._helperLine2);
