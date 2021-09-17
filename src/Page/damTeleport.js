@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import React, { useEffect, useRef, useState } from "react";
-import Axios from 'axios'
+import React, { useEffect, useRef } from "react";
+// import Axios from 'axios'
 
 import CameraControls from "camera-controls";
 import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
@@ -18,22 +18,22 @@ import Light from '../Util/light'
 
 import Teleport from '../Util/teleport'
 
-import { InteractiveGroup } from 'three/examples/jsm/interactive/InteractiveGroup.js';
-import { HTMLMesh } from 'three/examples/jsm/interactive/HTMLMesh'
+// import { InteractiveGroup } from 'three/examples/jsm/interactive/InteractiveGroup.js';
+// import { HTMLMesh } from 'three/examples/jsm/interactive/HTMLMesh'
 import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory";
 
 
-const loader = new THREE.TextureLoader();
-const onlyMeshNormalMat = new THREE.MeshNormalMaterial();
-const faceMat = new THREE.MeshBasicMaterial({ map: loader.load('img/avatar.png') })
-const cubeMaterials = [
-    onlyMeshNormalMat,
-    onlyMeshNormalMat,
-    onlyMeshNormalMat,
-    onlyMeshNormalMat,
-    faceMat, //front side
-    onlyMeshNormalMat, //back side
-];
+// const loader = new THREE.TextureLoader();
+// const onlyMeshNormalMat = new THREE.MeshNormalMaterial();
+// const faceMat = new THREE.MeshBasicMaterial({ map: loader.load('img/avatar.png') })
+// const cubeMaterials = [
+//     onlyMeshNormalMat,
+//     onlyMeshNormalMat,
+//     onlyMeshNormalMat,
+//     onlyMeshNormalMat,
+//     faceMat, //front side
+//     onlyMeshNormalMat, //back side
+// ];
 
 let teleport = { update: () => { } }
 
@@ -41,8 +41,8 @@ let water, sun;
 let waterBody
 let waterGroup
 
-let elevationController
-let azimuthController
+// let elevationController
+// let azimuthController
 
 let cameraRig = new THREE.Group();;
 
@@ -241,15 +241,15 @@ export default function Main() {
             .start()
     }
 
-    function ElevationControl(value) {
+    // function ElevationControl(value) {
 
-        return () => elevationController.setValue(elevationController.getValue() + value)
-    }
+    //     return () => elevationController.setValue(elevationController.getValue() + value)
+    // }
 
-    function AzimuthControl(value) {
+    // function AzimuthControl(value) {
 
-        return () => azimuthController.setValue(azimuthController.getValue() + value)
-    }
+    //     return () => azimuthController.setValue(azimuthController.getValue() + value)
+    // }
 
     function EnvSetUp() {
         sun = new THREE.Vector3();
@@ -335,8 +335,8 @@ export default function Main() {
         const gui = new GUI({ autoPlace: false });
 
         const folderSky = gui.addFolder('Sky');
-        elevationController = folderSky.add(parameters, 'elevation', 0, 90, 0.1).onChange(updateSun);
-        azimuthController = folderSky.add(parameters, 'azimuth', - 180, 180, 0.1).onChange(updateSun);
+        // elevationController = folderSky.add(parameters, 'elevation', 0, 90, 0.1).onChange(updateSun);
+        // azimuthController = folderSky.add(parameters, 'azimuth', - 180, 180, 0.1).onChange(updateSun);
         folderSky.open();
 
 
