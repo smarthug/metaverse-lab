@@ -18,10 +18,10 @@ import Light from '../Util/light'
 
 import Chart from 'react-apexcharts'
 
-import { InteractiveGroup } from 'three/examples/jsm/interactive/InteractiveGroup.js';
+// import { InteractiveGroup } from 'three/examples/jsm/interactive/InteractiveGroup.js';
 import { HTMLMesh } from 'three/examples/jsm/interactive/HTMLMesh'
 
-import Logo from './chart.svg'
+// import Logo from './chart.svg'
 
 // const defaultChart = {
 //   options: {
@@ -163,10 +163,10 @@ export default function Main() {
         return v.totdcwtrqy
       })
       console.log(data)
-      // setData([{
-      //   name: 'series-1',
-      //   data: data
-      // }])
+      setData([{
+        name: 'series-1',
+        data: data
+      }])
       // setData(res.data.response.body.items.item)
     })
 

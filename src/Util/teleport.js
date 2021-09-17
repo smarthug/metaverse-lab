@@ -16,10 +16,10 @@ const directionVec = new THREE.Vector3();
 const tmp = new THREE.Vector3();
 
 // mock dest marker
-const cone = new THREE.Mesh(
-    new THREE.ConeGeometry(0.5, 1.5, 32),
-    new THREE.MeshNormalMaterial({ wireframe: false })
-);
+// const cone = new THREE.Mesh(
+//     new THREE.ConeGeometry(0.5, 1.5, 32),
+//     new THREE.MeshNormalMaterial({ wireframe: false })
+// );
 
 
 
@@ -48,7 +48,18 @@ const matHelper = new THREE.MeshBasicMaterial({
 });
 
 const lineMesh = new THREE.Line(lineGeo, matHelper);
-lineMesh.name = 'the fuck'
+// lineMesh.name = 'the fuck'
+
+const dir = new THREE.Vector3(1, 0, 0);
+
+//normalize the direction vector (convert to vector of length 1)
+dir.normalize();
+
+const origin = new THREE.Vector3(0, 0, 0);
+const length = 1;
+const hex = 0xffff00;
+
+const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
 
 export default class Teleport extends THREE.EventDispatcher {
     constructor(
@@ -92,16 +103,7 @@ export default class Teleport extends THREE.EventDispatcher {
             // this._cameraRig.parent.add(destMarker);
 
 
-            const dir = new THREE.Vector3(1, 0, 0);
 
-            //normalize the direction vector (convert to vector of length 1)
-            dir.normalize();
-
-            const origin = new THREE.Vector3(0, 0, 0);
-            const length = 1;
-            const hex = 0xffff00;
-
-            const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
             // scene.add(arrowHelper);
 
             destMarker = new THREE.Object3D();
