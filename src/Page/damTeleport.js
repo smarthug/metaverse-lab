@@ -470,7 +470,7 @@ export default function Main() {
       tmpNameCard.position.set(0, 1, 0);
       tmp.add(tmpNameCard);
       //   gltf.add(tmpNameCard);
-      scene.add(tmp)
+      scene.add(tmp);
       gltf.name = "man";
 
       transformControls.attach(tmp);
@@ -480,28 +480,60 @@ export default function Main() {
     Loader(
       "https://d1a370nemizbjq.cloudfront.net/bc909266-6f48-4b5a-ae18-257ce65c3782.glb"
     ).then((gltf) => {
-      scene.add(gltf);
-      // Vector3 {x: 5.878819840867946, y: 62.24612750856752, z: -132.85781019943977}
-      gltf.position.set(5.8, 62.2, -132.8);
-      console.log(gltf);
-      gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false;
+        let tmp = new THREE.Group();
+      tmp.add(gltf);
+      let nameData = [
+        {
+          name: "이호형 개발자",
+          nameHeight: 0.05,
+          sub: "정보관리처",
+          subHeight: 0.02,
+          color: "black",
+        },
+      ];
 
+      let tmpNameCard = nameCard(nameData);
+      // let tmpNameCard = nameCard("\n홍길동(부장)")
+      tmpNameCard.position.set(0, 1, 0);
+      tmp.add(tmpNameCard);
+    //   scene.add(gltf);
+      // Vector3 {x: 5.878819840867946, y: 62.24612750856752, z: -132.85781019943977}
+    //   gltf.position.set(5.8, 62.2, -132.8);
+    //   console.log(gltf);
+      gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false;
+      scene.add(tmp);
       // gltf.scale.multiplyScalar(100)
     });
 
     Loader(
       "https://d1a370nemizbjq.cloudfront.net/8be892e2-04c0-4a14-aa8b-78a25f7a8482.glb"
     ).then((gltf) => {
-      scene.add(gltf);
-      gltf.position.set(1.4614304994230993, 61.64914942739388, -135.8618);
+
+        let tmp = new THREE.Group();
+      let nameData = [
+        {
+          name: "김혜진 대리",
+          nameHeight: 0.05,
+          sub: "물산업혁신처",
+          subHeight: 0.02,
+          color: "black",
+        },
+      ];
+
+      let tmpNameCard = nameCard(nameData);
+      // let tmpNameCard = nameCard("\n홍길동(부장)")
+      tmpNameCard.position.set(0, 1, 0);
+      tmp.add(tmpNameCard);
+      tmp.add(gltf);
+      tmp.position.set(1.4614304994230993, 61.64914942739388, -135.8618);
       // _x: -3.141592653589793
       // _y: 1.235250164183875
       // _z: -3.141592653589793
-      gltf.rotation.set(-3.141, 1.2352, -3.141);
+      tmp.rotation.set(-3.141, 1.2352, -3.141);
       console.log(gltf);
       gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false;
-
-    //   transformControls.attach(gltf);
+      scene.add(tmp);
+      //   transformControls.attach(gltf);
       // transformControls.attach(gltf);
       // gltf.scale.multiplyScalar(100)
     });
