@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 // import Axios from 'axios'
 
 import CameraControls from "camera-controls";
+import {TransformControls} from 'three/examples/jsm/controls/TransformControls'
 import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
 
 import { Water } from "three/examples/jsm/objects/Water.js";
@@ -46,7 +47,7 @@ let destHandHelper = new THREE.Group();
 
 CameraControls.install({ THREE: THREE });
 
-let cube, scene, camera, renderer, cameraControls;
+let cube, scene, camera, renderer, cameraControls, transformControls;
 const clock = new THREE.Clock();
 
 export default function Main() {
@@ -80,6 +81,8 @@ export default function Main() {
 
     function Logger() {
         console.log(scene);
+        console.log(transformControls)
+        // console.log
     }
 
 
@@ -196,6 +199,8 @@ export default function Main() {
             camera.position.z = 30;
             cameraRig.add(camera)
             cameraControls = new CameraControls(camera, renderer.domElement);
+
+
             // camera controls 위치 디폴트로 이동시키기 ... 
 
             // e 버튼 누르면 나오는 함수 여기서 
@@ -352,7 +357,7 @@ export default function Main() {
             gltf.scale.multiplyScalar(100)
         })
 
-        
+
 
 
         Light(scene)
@@ -375,6 +380,9 @@ export default function Main() {
             console.log(gltf)
             gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false
             // gltf.scale.multiplyScalar(100)
+
+            transformControls.attach(gltf);
+            scene.add(transformControls)
         })
 
         Loader("https://d1a370nemizbjq.cloudfront.net/bc909266-6f48-4b5a-ae18-257ce65c3782.glb").then((gltf) => {
@@ -444,6 +452,17 @@ export default function Main() {
         camera.position.z = 30;
 
         cameraControls = new CameraControls(camera, renderer.domElement);
+
+
+        transformControls = new TransformControls(camera, renderer.domElement);
+
+        // transformControls.addEventListener('change', render);
+
+        transformControls.addEventListener('dragging-changed', function (event) {
+
+            cameraControls.enabled = !event.value;
+
+        });
 
         let vrBtnElem = VRButton.createButton(renderer)
         // vrBtnElem.addEventListener('click', () => {
