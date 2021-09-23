@@ -484,12 +484,14 @@ export default function Main() {
 
         Loader("https://d1a370nemizbjq.cloudfront.net/6aea7546-37ef-4653-b4d1-713f9ef67ced.glb").then((gltf) => {
             scene.add(gltf)
-            gltf.position.set(0, 5, 0)
+            gltf.position.set(7.591, 62.06,-135.4892)
+            // {x: 7.591179294288835, y: 62.064164713769046, z: -135.48920260318448}
             console.log(gltf)
             gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false
             // gltf.scale.multiplyScalar(100)
 
             transformControls.attach(gltf);
+            gltf.name = "man"
             scene.add(transformControls)
         })
 
@@ -508,7 +510,7 @@ export default function Main() {
             console.log(gltf)
             gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false
 
-            transformControls.attach(gltf);
+            // transformControls.attach(gltf);
             // gltf.scale.multiplyScalar(100)
         })
 
@@ -600,6 +602,10 @@ export default function Main() {
             cameraControls.enabled = !event.value;
 
         });
+
+        transformControls.addEventListener('objectChange', (e) => {
+            console.log(e.target.object.position);
+          })
 
         let vrBtnElem = VRButton.createButton(renderer)
         // vrBtnElem.addEventListener('click', () => {
