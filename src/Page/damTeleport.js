@@ -73,6 +73,12 @@ export default function Main() {
 
         installFuncHotkey(Logger, 'l')
 
+        installFuncHotkey(translateMode, 'w')
+        installFuncHotkey(rotateMode,'e')
+        installFuncHotkey(scaleMode, 'r')
+
+        installFuncHotkey(visibleToggle, 'q')
+
         // installFuncHotkey(ElevationControl(1), "ArrowUp")
 
 
@@ -81,6 +87,22 @@ export default function Main() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    function translateMode(){
+        transformControls.setMode('translate')
+    }
+
+    function rotateMode(){
+        transformControls.setMode('rotate')
+    }
+
+    function scaleMode(){
+        transformControls.setMode('scale')
+    }
+
+    function visibleToggle(){
+        transformControls.visible = !transformControls.visible;
+    }
 
     function Logger() {
         console.log(scene);
@@ -483,6 +505,8 @@ export default function Main() {
             gltf.position.set(1, 5, 0)
             console.log(gltf)
             gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false
+
+            transformControls.attach(gltf);
             // gltf.scale.multiplyScalar(100)
         })
 
