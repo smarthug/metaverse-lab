@@ -18,8 +18,8 @@ import Loader from '../Util/loader'
 import Light from '../Util/light'
 
 import Teleport from '../Util/teleport'
-import { WsGraphView } from '../Util/graph'
-import { NameCard } from '../Util/spriteText'
+import {WsGraphView} from '../Util/graph'
+import { nameCard } from "../Util/spriteText";
 
 // import { InteractiveGroup } from 'three/examples/jsm/interactive/InteractiveGroup.js';
 // import { HTMLMesh } from 'three/examples/jsm/interactive/HTMLMesh'
@@ -64,6 +64,8 @@ export default function Main() {
         // teleport setup func needed
         TeleportSetUp()
         APICall()
+
+
         installFuncHotkey(WaterLevelControl(5), "1")
         installFuncHotkey(WaterLevelControl(-5), "2")
         installFuncHotkey(TempTeleport, "t")
@@ -525,9 +527,32 @@ export default function Main() {
         const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
         scene.add(arrowHelper);
 
+        let nameData = [
+          {
+            name: "홍길동 부장",
+            nameHeight: 0.05,
+            sub: "정보관리처",
+            subHeight: 0.02,
+            color: "white"
+          },
+        ];
+        
+        let tmpNameCard = nameCard(nameData)
+        // let tmpNameCard = nameCard("\n홍길동(부장)")
+        tmpNameCard.position.set(2,6,0);
 
-        // let a = NameCard(['정호석', '넥시빌', '사원'])
-        // scene.add(a)
+        
+        // let tmpNameCard2 = nameCard("이호형(사원)\n수자원공사-물산업혁신처")
+        // tmpNameCard2.position.set(0,6,0);
+
+        
+        // let tmpNameCard3 = nameCard("정호석(대리)\n수자원공사-물산업혁신처")
+        // tmpNameCard3.position.set(1,6,0);
+
+        scene.add(tmpNameCard)
+        // scene.add(tmpNameCard2)
+        // scene.add(tmpNameCard3)
+
     }
 
     function Init() {
