@@ -2,7 +2,7 @@ import SpriteText from "three-spritetext";
 import * as THREE from 'three'
 
 //text = [ 물산업 혁신처, 이용우 부장, 수자원공사 ]
-export function name(text) {
+export function NameCard(text) {
     let nameSet = new THREE.Group();
 
     // let text;
