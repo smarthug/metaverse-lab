@@ -23,17 +23,7 @@ import Teleport from '../Util/teleport'
 import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory";
 
 
-// const loader = new THREE.TextureLoader();
-// const onlyMeshNormalMat = new THREE.MeshNormalMaterial();
-// const faceMat = new THREE.MeshBasicMaterial({ map: loader.load('img/avatar.png') })
-// const cubeMaterials = [
-//     onlyMeshNormalMat,
-//     onlyMeshNormalMat,
-//     onlyMeshNormalMat,
-//     onlyMeshNormalMat,
-//     faceMat, //front side
-//     onlyMeshNormalMat, //back side
-// ];
+
 
 let teleport = { update: () => { } }
 
@@ -356,7 +346,7 @@ export default function Main() {
 
 
         Loader("https://ipfs.io/ipfs/QmabJksgNiWHd8YJ5razFpaJAz6VWc2nBTGSNMFLyXV5MJ").then((gltf) => {
-            console.log(gltf)
+            // console.log(gltf)
             scene.add(gltf)
             gltf.position.set(50, -650, -600)
             gltf.scale.multiplyScalar(100)
@@ -383,8 +373,28 @@ export default function Main() {
             scene.add(gltf)
             gltf.position.set(0, 5, 0)
             console.log(gltf)
+            gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false
             // gltf.scale.multiplyScalar(100)
         })
+
+        Loader("https://d1a370nemizbjq.cloudfront.net/bc909266-6f48-4b5a-ae18-257ce65c3782.glb").then((gltf) => {
+            scene.add(gltf)
+            gltf.position.set(2, 5, 0)
+            console.log(gltf)
+            gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false
+            // gltf.scale.multiplyScalar(100)
+        })
+
+
+        Loader("https://d1a370nemizbjq.cloudfront.net/8be892e2-04c0-4a14-aa8b-78a25f7a8482.glb").then((gltf) => {
+            scene.add(gltf)
+            gltf.position.set(1, 5, 0)
+            console.log(gltf)
+            gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false
+            // gltf.scale.multiplyScalar(100)
+        })
+
+        //axios ,,, 
 
 
         const dir = new THREE.Vector3(1, 0, 0);

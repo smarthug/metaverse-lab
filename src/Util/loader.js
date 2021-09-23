@@ -11,6 +11,7 @@ export default function Loader(path) {
 
   return new Promise((resolve) => {
     loader.load(path, (gltf) => {
+      console.log(gltf)
       const scene = gltf.scene || gltf.scenes[0];
       if (!scene) {
         throw new Error(
