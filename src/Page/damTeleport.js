@@ -79,11 +79,21 @@ export default function Main() {
     installFuncHotkey(scaleMode, "r");
 
     installFuncHotkey(visibleToggle, "q");
+    installFuncHotkey(lookAt, 'c')
 
     // installFuncHotkey(ElevationControl(1), "ArrowUp")
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function lookAt(){
+    scene.traverse(obj => {
+        if (obj.name === "graph") {
+            // obj.lookAt(cameraRig.position)
+            obj.lookAt(camera.position);
+        }
+    });
+  }
 
   function translateMode() {
     transformControls.setMode("translate");
