@@ -202,7 +202,8 @@ export function WsGraphView(data, target) {
   
     graphSet.name = "graph";
   
-    this.setOutputData(0, graphSet);
+    // this.setOutputData(0, graphSet);
+    return graphSet;
   };
 
   
