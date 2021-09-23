@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import React, { useEffect, useRef } from "react";
-// import Axios from 'axios'
+import Axios from 'axios'
 
 import CameraControls from "camera-controls";
 import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
@@ -17,12 +17,13 @@ import Loader from '../Util/loader'
 import Light from '../Util/light'
 
 import Teleport from '../Util/teleport'
+import {WsGraphView} from '../Util/graph'
 
 // import { InteractiveGroup } from 'three/examples/jsm/interactive/InteractiveGroup.js';
 // import { HTMLMesh } from 'three/examples/jsm/interactive/HTMLMesh'
 import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory";
 
-
+const url = 'http://booster-app.account7172.workers.dev/openapi-data/service/pubd/dam/sluicePresentCondition/mnt/list?damcode=1012110&stdt=2021-09-05&eddt=2021-09-05&numOfRows=144&pageNo=undefined&serviceKey=ejdrD89pyah0JlAaICprH0xOAEp0tAxvExhm2p0DT5Ulq2MskjlekFH7kFIAEt6d16gjJ2scGwRSLG4Rr1HUiA=='
 
 
 let teleport = { update: () => { } }
@@ -60,6 +61,7 @@ export default function Main() {
         EnvSetUp();
         // teleport setup func needed
         TeleportSetUp()
+        APICall()
         installFuncHotkey(WaterLevelControl(5), "1")
         installFuncHotkey(WaterLevelControl(-5), "2")
         installFuncHotkey(TempTeleport, "t")
@@ -80,6 +82,87 @@ export default function Main() {
 
     function Logger() {
         console.log(scene);
+    }
+
+    function APICall(){
+        Axios.get(url).then((res) => {
+            // console.log(res);
+            // console.log(res.data.response.body.items.item)
+            const stct = 0
+            const edct = 24
+            const items = res.data.response.body.items.item
+            let wsData = {
+                obsrdtmnt: [],
+                lowlevel: [],
+                rf: [],
+                inflowqy: [],
+                totdcwtrqy: [],
+                rsvwtqy: [],
+                rsvwtrt: [],
+              };
+              if (stct > edct || stct < 0 || edct > 24) {
+                for (let i in items) {
+                  wsData.inflowqy.push(items[i].inflowqy);
+                  wsData.lowlevel.push(items[i].lowlevel);
+                  wsData.obsrdtmnt.push(items[i].obsrdtmnt);
+                  wsData.rf.push(items[i].rf);
+                  wsData.rsvwtqy.push(items[i].rsvwtqy);
+                  wsData.rsvwtrt.push(items[i].rsvwtrt);
+                  wsData.totdcwtrqy.push(items[i].totdcwtrqy);
+                }
+              } else {
+                for (let i = stct * 6; i < edct * 6; i++) {
+                  if (!items[i]) continue;
+                  wsData.inflowqy.push(items[i].inflowqy);
+                  wsData.lowlevel.push(items[i].lowlevel);
+                  wsData.obsrdtmnt.push(items[i].obsrdtmnt);
+                  wsData.rf.push(items[i].rf);
+                  wsData.rsvwtqy.push(items[i].rsvwtqy);
+                  wsData.rsvwtrt.push(items[i].rsvwtrt);
+                  wsData.totdcwtrqy.push(items[i].totdcwtrqy);
+                }
+              }
+            // let tmp = res.data.response.body.items.item
+
+            let totdcwtrqy = WsGraphView(wsData, "totdcwtrqy")
+            totdcwtrqy.scale.multiplyScalar(0.0001)
+            totdcwtrqy.position.set(-30,60,-150)
+            scene.add(totdcwtrqy)
+
+            let rf = WsGraphView(wsData, "rf")
+            rf.scale.multiplyScalar(0.0001)
+            rf.position.set( -80,100,-150)
+            scene.add(rf)
+
+            let inflowqy = WsGraphView(wsData, "inflowqy")
+            inflowqy.scale.multiplyScalar(0.0001)
+            inflowqy.position.set(20,5,250)
+            scene.add(inflowqy)
+
+            let rsvwtqy = WsGraphView(wsData, "rsvwtqy")
+            rsvwtqy.scale.multiplyScalar(0.0001)
+            rsvwtqy.position.set(10,100,250)
+            scene.add(rsvwtqy)
+
+            let rsvwtrt = WsGraphView(wsData, "rsvwtrt")
+            rsvwtrt.scale.multiplyScalar(0.0001)
+            rsvwtrt.position.set(50,100,250)
+            scene.add(rsvwtrt)
+
+            // let totdcwtrqy = WsGraphView(wsData, "totdcwtrqy")
+            // totdcwtrqy.scale.multiplyScalar(0.0001)
+            // totdcwtrqy.position.set()
+            // scene.add(totdcwtrqy)
+
+            // let result = tmp.slice(tmp.length - 10)
+            // console.log(result)
+            // // let data = []
+            // let data = tmp.map((v, i) => {
+            //   return v.totdcwtrqy
+            // })
+            // console.log(data)
+            // setData(res.data.response.body.items.item)
+          })
     }
 
 

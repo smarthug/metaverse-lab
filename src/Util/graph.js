@@ -23,7 +23,7 @@ const targetData = {
   };
 
 export function WsGraphView(data, target) {
-   
+   console.log(data)
     let material = new THREE.LineBasicMaterial({ color: 0x0062ff });
     let textMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
     let graphSet = new THREE.Group();
@@ -71,7 +71,7 @@ export function WsGraphView(data, target) {
       ((yMax - yMin) * yCali * scale) / 2,
       0,
     ];
-  
+  console.log(data)
     for (let i = 0; i < xAxiosLength + 1; i++) {
       pts.push(
         new THREE.Vector3(
@@ -185,7 +185,7 @@ export function WsGraphView(data, target) {
     backgroundMesh.position.set(
       backgroudMeshPos[0],
       backgroudMeshPos[1],
-      backgroudMeshPos[2] - 100
+      backgroudMeshPos[2] - 15
     );
   
     graphSet.add(LabelInsert(textList, textMat));
