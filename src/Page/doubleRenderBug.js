@@ -191,8 +191,8 @@ export default function Main() {
         0.1,
         100000
       );
-      camera.position.y = 30;
-      camera.position.z = 30;
+    //   camera.position.y = 30;
+    //   camera.position.z = 30;
       // cameraRig.add(camera);
       cameraControls = new CameraControls(camera, renderer.domElement);
 
@@ -313,7 +313,7 @@ export default function Main() {
     waterBody.position.y = -50.01;
 
     waterGroup.add(waterBody);
-    waterGroup.add(water);
+    // waterGroup.add(water);
     scene.add(waterGroup);
 
     // Skybox
@@ -461,8 +461,8 @@ export default function Main() {
     // camera.position.y = 150;
     // camera.position.z = 150;
 
-    camera.position.y = 30;
-    camera.position.z = 30;
+    // camera.position.y = 30;
+    // camera.position.z = 30;
 
     cameraControls = new CameraControls(camera, renderer.domElement);
 
