@@ -313,7 +313,7 @@ export default function Main() {
     waterBody.position.y = -50.01;
 
     waterGroup.add(waterBody);
-    // waterGroup.add(water);
+    waterGroup.add(water);
     scene.add(waterGroup);
 
     // Skybox
