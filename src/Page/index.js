@@ -19,3 +19,5 @@
 // export * as PlayGround from './playGround'
 
 export * as DamTeleport from './damTeleport'
+export * as WaterBug from './waterBug'
+export * as DoubleRenderBug from './doubleRenderBug'
