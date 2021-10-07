@@ -9,7 +9,9 @@ import { Sky } from "three/examples/jsm/objects/Sky.js";
 import { GUI } from "dat.gui";
 import Light from "../Util/light";
 
-import {install} from '@github/hotkey'
+// import {install} from '@github/hotkey'
+
+import {installFuncHotkey} from 'use-github-hotkey'
 
 CameraControls.install({ THREE: THREE });
 
@@ -33,8 +35,8 @@ export default function Main() {
     useEffect(() => {
         Init();
         
-        
-        install(teleportBtnRef.current, "t")
+        installFuncHotkey(CameraMove, "t")
+        // install(teleportBtnRef.current, "t")
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
