@@ -4,19 +4,13 @@ import CameraControls from "camera-controls";
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import { Water } from "three/examples/jsm/objects/Water.js";
 import { Sky } from "three/examples/jsm/objects/Sky.js";
-import { GUI } from "dat.gui";
-import Light from "../Util/light";
 import { install } from '@github/hotkey'
 
-
-
 CameraControls.install({ THREE: THREE });
-
 
 let water, sun;
 let waterGroup;
 let cameraRig = new THREE.Group();
-
 let cube, scene, camera, renderer, cameraControls;
 const clock = new THREE.Clock();
 
@@ -30,7 +24,7 @@ export default function Main() {
 
     useEffect(() => {
         Init();
-        EnvSetUp();
+        waterInit();
         install(teleportBtnRef.current, "t")
         install(waterToggleBtnRef.current, "w")
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,6 +38,8 @@ export default function Main() {
             0.1,
             100000
         );
+        camera.position.y = 35;
+        camera.position.z = 35;
         renderer = new THREE.WebGLRenderer({
             antialias: true,
             canvas: canvasRef.current,
@@ -53,24 +49,17 @@ export default function Main() {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.xr.setFramebufferScaleFactor(2.0);
+        renderer.setAnimationLoop(Animate);
 
         var geometry = new THREE.BoxGeometry(1, 1, 1);
         var material = new THREE.MeshNormalMaterial();
         cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
-        camera.position.y = 35;
-        camera.position.z = 35;
 
         cameraControls = new CameraControls(camera, renderer.domElement);
 
 
         vrButtonConRef.current.appendChild(VRButton.createButton(renderer));
-
-        renderer.setAnimationLoop(Animate);
-
-        // window.addEventListener("resize", () => resizer(camera, renderer));
-
-        // SceneSetUp(scene)
 
 
         cameraRig.add(camera);
@@ -79,7 +68,7 @@ export default function Main() {
 
     }
 
-    function EnvSetUp() {
+    function waterInit() {
         sun = new THREE.Vector3();
 
         // Water
@@ -146,19 +135,6 @@ export default function Main() {
         }
 
         updateSun();
-
-        // GUI
-
-        const gui = new GUI({ autoPlace: false });
-
-        const folderSky = gui.addFolder("Sky");
-        // elevationController = folderSky.add(parameters, 'elevation', 0, 90, 0.1).onChange(updateSun);
-        // azimuthController = folderSky.add(parameters, 'azimuth', - 180, 180, 0.1).onChange(updateSun);
-        folderSky.open();
-
-
-
-        Light(scene);
     }
 
     function Animate() {
@@ -166,20 +142,18 @@ export default function Main() {
         cube.rotation.y += 0.01;
 
         const delta = clock.getDelta();
-        // const hasControlsUpdated = cameraControls.update(delta);
-        // water.material.uniforms["time"].value += 1.0 / 60.0;
-        water.material.uniforms["time"].value += delta;
         cameraControls.update(delta);
+
+        water.material.uniforms["time"].value += delta;
 
         renderer.render(scene, camera);
     }
 
     function teleport() {
-
         cameraRig.position.add(new THREE.Vector3(10, 10, 10))
 
-        console.log(`${cameraRig.children[0].matrix.elements}`)
-        console.log(`${cameraRig.children[0].matrixWorld.elements}`)
+        console.log(`camera.matrix : ${cameraRig.children[0].matrix.elements}`)
+        console.log(`camera.matrixWorld : ${cameraRig.children[0].matrixWorld.elements}`)
     }
 
 
@@ -188,7 +162,6 @@ export default function Main() {
             scene.add(waterGroup)
         } else {
             scene.remove(waterGroup)
-
         }
     }
 
