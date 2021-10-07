@@ -26,10 +26,13 @@ export default function Main() {
     const vrButtonConRef = useRef();
 
     const teleportBtnRef = useRef();
+    const waterToggleBtnRef = useRef();
+
     useEffect(() => {
         Init();
         EnvSetUp();
         install(teleportBtnRef.current, "t")
+        install(waterToggleBtnRef.current, "w")
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -39,7 +42,7 @@ export default function Main() {
             75,
             window.innerWidth / window.innerHeight,
             0.1,
-            1000
+            100000
         );
         renderer = new THREE.WebGLRenderer({
             antialias: true,
@@ -48,13 +51,15 @@ export default function Main() {
         renderer.xr.enabled = true;
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.xr.setFramebufferScaleFactor(2.0);
 
         var geometry = new THREE.BoxGeometry(1, 1, 1);
         var material = new THREE.MeshNormalMaterial();
         cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
-        camera.position.z = 5;
+        camera.position.y = 35;
+        camera.position.z = 35;
 
         cameraControls = new CameraControls(camera, renderer.domElement);
 
@@ -70,14 +75,16 @@ export default function Main() {
 
         cameraRig.add(camera);
 
-        
+        scene.add(cameraRig)
+
     }
 
-    function EnvSetUp(){
+    function EnvSetUp() {
         sun = new THREE.Vector3();
 
         // Water
         waterGroup = new THREE.Group();
+        waterGroup.name = "water"
 
         const waterGeometry = new THREE.PlaneGeometry(1000, 1000);
 
@@ -167,17 +174,22 @@ export default function Main() {
         renderer.render(scene, camera);
     }
 
-    function CameraMove() {
-        // 
-        // cameraRig.translateZ(10)
-        // cameraRig.position.add(tmpVector)
-        cameraRig.position.add(new THREE.Vector3(10, 10, 10))
+    function teleport() {
 
-        // console.log(`${cameraRig.matrix.elements}`)
-        // console.log(`${cameraRig.matrixWorld.elements}`)
+        cameraRig.position.add(new THREE.Vector3(10, 10, 10))
 
         console.log(`${cameraRig.children[0].matrix.elements}`)
         console.log(`${cameraRig.children[0].matrixWorld.elements}`)
+    }
+
+
+    function waterToggle() {
+        if (scene.getObjectByName("water") === undefined) {
+            scene.add(waterGroup)
+        } else {
+            scene.remove(waterGroup)
+
+        }
     }
 
     return (
@@ -189,7 +201,8 @@ export default function Main() {
             ref={containerRef}
         >
             <div style={{ position: "absolute" }}>
-                <button ref={teleportBtnRef} onClick={CameraMove}>Camera Move</button>
+                <button ref={teleportBtnRef} onClick={teleport}>Press 't' to teleport</button>
+                <button ref={waterToggleBtnRef} onClick={waterToggle}>Press 'w' to Add/Remove the water in the scene</button>
             </div>
             <canvas ref={canvasRef} />
             <div ref={vrButtonConRef}></div>
