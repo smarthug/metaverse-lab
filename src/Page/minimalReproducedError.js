@@ -1,17 +1,14 @@
 import * as THREE from "three";
 import React, { useEffect, useRef } from "react";
-
 import CameraControls from "camera-controls";
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
-
 import { Water } from "three/examples/jsm/objects/Water.js";
 import { Sky } from "three/examples/jsm/objects/Sky.js";
 import { GUI } from "dat.gui";
 import Light from "../Util/light";
+import {install} from '@github/hotkey'
 
-// import {install} from '@github/hotkey'
-
-import {installFuncHotkey} from 'use-github-hotkey'
+// import {installFuncHotkey} from 'use-github-hotkey'
 
 CameraControls.install({ THREE: THREE });
 
@@ -35,8 +32,8 @@ export default function Main() {
     useEffect(() => {
         Init();
         
-        installFuncHotkey(CameraMove, "t")
-        // install(teleportBtnRef.current, "t")
+        // installFuncHotkey(CameraMove, "t")
+        install(teleportBtnRef.current, "t")
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -106,7 +103,7 @@ export default function Main() {
        
 
         
-        // waterGroup.add(water);
+        waterGroup.add(water);
         scene.add(waterGroup);
 
         // Skybox
@@ -152,14 +149,7 @@ export default function Main() {
         // azimuthController = folderSky.add(parameters, 'azimuth', - 180, 180, 0.1).onChange(updateSun);
         folderSky.open();
 
-        // Loader(
-        //   "https://ipfs.io/ipfs/QmabJksgNiWHd8YJ5razFpaJAz6VWc2nBTGSNMFLyXV5MJ"
-        // ).then((gltf) => {
-        //   // console.log(gltf)
-        //   scene.add(gltf);
-        //   gltf.position.set(50, -650, -600);
-        //   gltf.scale.multiplyScalar(100);
-        // });
+        
 
         Light(scene);
     }

@@ -1,53 +1,24 @@
 import * as THREE from "three";
 import React, { useEffect, useRef } from "react";
-import Axios from "axios";
-
 import CameraControls from "camera-controls";
-// import {  } from "three/examples/jsm/controls/";
 import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
-
-// import { Water } from "three/examples/jsm/objects/Water.js";
 import { Water } from "../Util/water";
 import { Sky } from "three/examples/jsm/objects/Sky.js";
-
-import { installFuncHotkey } from "use-github-hotkey";
-
-import { TWEEN } from "three/examples/jsm/libs/tween.module.min";
 import { GUI } from "dat.gui";
-
-import Loader from "../Util/loader";
 import Light from "../Util/light";
+import { install } from '@github/hotkey'
 
-import Teleport from "../Util/teleport";
-import { WsGraphView } from "../Util/graph";
-import { nameCard } from "../Util/spriteText";
 
-// import { InteractiveGroup } from 'three/examples/jsm/interactive/InteractiveGroup.js';
-// import { HTMLMesh } from 'three/examples/jsm/interactive/HTMLMesh'
-import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory";
 
-const url =
-  "http://booster-app.account7172.workers.dev/openapi-data/service/pubd/dam/sluicePresentCondition/mnt/list?damcode=1012110&stdt=2021-09-05&eddt=2021-09-05&numOfRows=144&pageNo=undefined&serviceKey=ejdrD89pyah0JlAaICprH0xOAEp0tAxvExhm2p0DT5Ulq2MskjlekFH7kFIAEt6d16gjJ2scGwRSLG4Rr1HUiA==";
-
-let teleport = { update: () => { } };
 
 let water, sun;
 let waterBody;
 let waterGroup;
 
-// let elevationController
-// let azimuthController
+
 
 let cameraRig = new THREE.Group();
-cameraRig.matrixAutoUpdate = false;
 
-let controller0;
-let controller1;
-
-let playerHandHelper = new THREE.Group();
-let destHandHelper = new THREE.Group();
-
-// import { resizer, SceneSetUp } from "../Utils/utils";
 
 CameraControls.install({ THREE: THREE });
 
@@ -60,37 +31,24 @@ export default function Main() {
   const vrButtonConRef = useRef();
   const datGuiConRef = useRef();
 
+  const teleportBtnRef = useRef();
+
   useEffect(() => {
     Init();
     EnvSetUp();
     // teleport setup func needed
-    TeleportSetUp();
-
-    installFuncHotkey(WaterLevelControl(5), "1");
-    installFuncHotkey(WaterLevelControl(-5), "2");
-    installFuncHotkey(TempTeleport, "t");
-
-    installFuncHotkey(EnterXRHotkey, "x r");
-    installFuncHotkey(postXR, "Escape");
-
-    installFuncHotkey(Logger, "l");
 
 
-    installFuncHotkey(lookAt, 'c')
+
+
+    install(teleportBtnRef.current, "t")
 
     // installFuncHotkey(ElevationControl(1), "ArrowUp")
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function lookAt() {
-    scene.traverse(obj => {
-      if (obj.name === "graph") {
-        // obj.lookAt(cameraRig.position)
-        obj.lookAt(camera.position);
-      }
-    });
-  }
+
 
 
 
@@ -102,167 +60,28 @@ export default function Main() {
 
 
 
-  function TeleportSetUp() {
-    // cameraRig = new THREE.Group();
-    controller0 = renderer.xr.getController(0);
-    controller1 = renderer.xr.getController(1);
-
-    // cameraRig.add(camera);
-    // cameraRig.add(controller0);
-    // cameraRig.add(controller1);
-
-    const controllerModelFactory = new XRControllerModelFactory();
-
-    let controllerGrip0 = renderer.xr.getControllerGrip(0);
-    controllerGrip0.add(
-      controllerModelFactory.createControllerModel(controllerGrip0)
-    );
-
-    let controllerGrip1 = renderer.xr.getControllerGrip(1);
-    controllerGrip1.add(
-      controllerModelFactory.createControllerModel(controllerGrip1)
-    );
-
-    // cameraRig.add(controllerGrip0);
-    // cameraRig.add(controllerGrip1);
-
-    const fontLoader = new THREE.FontLoader();
-
-    fontLoader.load(`fonts/helvetiker_regular.typeface.json`, (font) => {
-      const geometry = new THREE.TextGeometry("From", {
-        font: font,
-        size: 0.05,
-        height: 0.05,
-      });
-
-      playerHandHelper.add(
-        new THREE.Mesh(geometry, new THREE.MeshNormalMaterial())
-      );
-
-      const geometry2 = new THREE.TextGeometry("To", {
-        font: font,
-        size: 0.05,
-        height: 0.05,
-      });
-
-      destHandHelper.add(
-        new THREE.Mesh(geometry2, new THREE.MeshNormalMaterial())
-      );
-    });
-  }
-
-  function EnterXRHotkey() {
-    preXR();
-    document.getElementById("VRButton").click();
-  }
-
-  function preXR() {
-    cameraControls.dispose();
-    teleport = new Teleport(renderer, cameraRig, controller0, controller1, {
-      // destMarker: new THREE.Group(),
-      rightHanded: true,
-      playerHandHelper: playerHandHelper,
-      destHandHelper: destHandHelper,
-      multiplyScalar: 20,
-      scene: scene,
-    });
-
-    // const session = renderer.xr.getSession();
-    // session.addEventListener('end',postXR);
-  }
-
-  function postXR() {
-    cameraControls.dispose();
-    // cameraRig.position.set(0, 0, 0);
-    // esc 누르면 호출되는 ...
-    const session = renderer.xr.getSession();
-    session.end().then(() => {
-      console.log("teleport dispose");
-      teleport.dispose();
-      //다끝나고 누를까 ...
-      // 새 카메라 ?
-      // camera.dipose();
-      camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        100000
-      );
-      camera.position.y = 30;
-      camera.position.z = 30;
-      // cameraRig.add(camera);
-      cameraControls = new CameraControls(camera, renderer.domElement);
-
-      // camera controls 위치 디폴트로 이동시키기 ...
-
-      // e 버튼 누르면 나오는 함수 여기서
-
-      // scene.remove(interactiveGroup)
-      // cameraRig.remove(interactiveGroup);
-      // interactiveGroup.removeFromParent();
-    });
-  }
-
-  function TempTeleport() {
-    // 이걸로 테스팅 가능 ??
-    // console.log("teleport");
-    // cameraRig.position.addScalar(100);
-
-    // this._cameraRig.position.add(
-    //   this._resultVector.multiplyScalar(this._multiplyScalar)
-    // );
-    // cameraRig.position.add(new THREE.Vector3(10, 10, 10))
-
-    // // console.log(cameraRig.position)
-    // // console.log(cameraRig.children[0].position)
-    // console.log(cameraRig.children[0].position)
-    // console.log(cameraRig.children[0].rotation)
-    // console.log(cameraRig.children[0].scale)
-    // console.log(cameraRig.children[0].matrixWorld.toArray().join(" "));
 
 
-    // cube.position.add(new THREE.Vector3(10, 10, 10))
-
-    // // console.log(cameraRig.position)
-    // // console.log(cameraRig.children[0].position)
-    // cube.updateMatrix();
-    // console.log(cube.position)
-    // console.log(cube.rotation)
-    // console.log(cube.scale)
-    // console.log(cube.matrixWorld.toArray().join(" "));
-
-    // 카메라만 테스트 ... 
 
 
+
+
+
+
+  function CameraMove() {
+    // 
+    // cameraRig.translateZ(10)
+    // cameraRig.position.add(tmpVector)
     cameraRig.position.add(new THREE.Vector3(10, 10, 10))
-    // cameraRig.rotateY(Math.PI/2)
 
-    // console.log(camera.position)
-    // console.log(camera.children[0].position)
-    console.log(camera.position)
-    console.log(camera.rotation)
-    console.log(camera.scale)
-    console.log(camera.matrixWorld.toArray().join(" "));
+    // console.log(`${cameraRig.matrix.elements}`)
+    // console.log(`${cameraRig.matrixWorld.elements}`)
 
-    // cameraRig.updateMatrixWorld();
-    // cameraRig.updateWorldMatrix();
-    cameraRig.updateMatrix();
+    console.log(`${cameraRig.children[0].matrix.elements}`)
+    console.log(`${cameraRig.children[0].matrixWorld.elements}`)
   }
 
-  function WaterLevelControl(value) {
-    return () =>
-      new TWEEN.Tween(waterGroup.position)
-        .to(
-          {
-            // x: p.x,
-            y: waterGroup.position.y + value,
-            // z: p.z,
-          },
-          500
-        )
-        .easing(TWEEN.Easing.Quadratic.Out)
-        .start();
-  }
+
 
   function EnvSetUp() {
     sun = new THREE.Vector3();
@@ -302,7 +121,7 @@ export default function Main() {
 
     waterBody.position.y = -50.01;
 
-    waterGroup.add(waterBody);
+    // waterGroup.add(waterBody);
     waterGroup.add(water);
     scene.add(waterGroup);
 
@@ -349,51 +168,13 @@ export default function Main() {
     // azimuthController = folderSky.add(parameters, 'azimuth', - 180, 180, 0.1).onChange(updateSun);
     folderSky.open();
 
-    // Loader(
-    //   "https://ipfs.io/ipfs/QmabJksgNiWHd8YJ5razFpaJAz6VWc2nBTGSNMFLyXV5MJ"
-    // ).then((gltf) => {
-    //   // console.log(gltf)
-    //   scene.add(gltf);
-    //   gltf.position.set(50, -650, -600);
-    //   gltf.scale.multiplyScalar(100);
-    // });
+
 
     Light(scene);
 
 
 
-    Loader(
-      "https://d1a370nemizbjq.cloudfront.net/6aea7546-37ef-4653-b4d1-713f9ef67ced.glb"
-    ).then((gltf) => {
-      let tmp = new THREE.Group();
-      tmp.add(gltf);
-      //   scene.add(gltf);
-      //   gltf.position.set(7.591, 62.06, -135.4892);
-      // {x: 7.591179294288835, y: 62.064164713769046, z: -135.48920260318448}
-      console.log(gltf);
-      gltf.children[0].getObjectByName("Wolf3D_Hands").visible = false;
-      // gltf.scale.multiplyScalar(100)
 
-      let nameData = [
-        {
-          name: "정호석 개발자",
-          nameHeight: 0.05,
-          sub: "정보관리처",
-          subHeight: 0.02,
-          color: "black",
-        },
-      ];
-
-      let tmpNameCard = nameCard(nameData);
-      // let tmpNameCard = nameCard("\n홍길동(부장)")
-      tmpNameCard.position.set(0, 1, 0);
-      tmp.add(tmpNameCard);
-      //   gltf.add(tmpNameCard);
-      scene.add(tmp);
-      gltf.name = "man";
-
-  
-    });
 
 
 
@@ -414,7 +195,7 @@ export default function Main() {
     renderer = new THREE.WebGLRenderer({
       antialias: true,
       canvas: canvasRef.current,
-      logarithmicDepthBuffer: true,
+      // logarithmicDepthBuffer: true,
     });
     renderer.xr.enabled = true;
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -426,35 +207,27 @@ export default function Main() {
     var material = new THREE.MeshNormalMaterial();
     cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
-    // camera.position.y = 150;
-    // camera.position.z = 150;
+
 
     camera.position.y = 30;
     camera.position.z = 30;
 
     cameraControls = new CameraControls(camera, renderer.domElement);
 
- 
+
 
     let vrBtnElem = VRButton.createButton(renderer);
-    // vrBtnElem.addEventListener('click', () => {
-    //     console.log("hello XR")
-    // })
 
-    vrBtnElem.addEventListener("click", preXR);
+
+
 
     vrButtonConRef.current.appendChild(vrBtnElem);
 
     renderer.setAnimationLoop(Animate);
 
-    controller0 = renderer.xr.getController(0);
-    controller1 = renderer.xr.getController(1);
+
 
     cameraRig.add(camera);
-    // scene.add(camera)
-    // cameraRig.add(controller0);
-    // cameraRig.add(controller1);
-    // window.addEventListener("resize", () => resizer(camera, renderer));
   }
 
   function Animate() {
@@ -465,9 +238,8 @@ export default function Main() {
     // const hasControlsUpdated = cameraControls.update(delta);
     cameraControls.update(delta);
 
-    teleport.update();
-    TWEEN.update();
-    water.material.uniforms["time"].value += 1.0 / 60.0;
+
+    water.material.uniforms["time"].value += delta;
 
     renderer.render(scene, camera);
   }
@@ -481,6 +253,9 @@ export default function Main() {
       }}
       ref={containerRef}
     >
+      <div style={{ position: "absolute" }}>
+        <button ref={teleportBtnRef} onClick={CameraMove}>Camera Move</button>
+      </div>
       <canvas ref={canvasRef} />
       <div ref={datGuiConRef}></div>
       <div ref={vrButtonConRef}></div>
