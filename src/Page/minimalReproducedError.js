@@ -6,22 +6,19 @@ import { Water } from "three/examples/jsm/objects/Water.js";
 import { Sky } from "three/examples/jsm/objects/Sky.js";
 import { GUI } from "dat.gui";
 import Light from "../Util/light";
-import {install} from '@github/hotkey'
+import { install } from '@github/hotkey'
 
-// import {installFuncHotkey} from 'use-github-hotkey'
+
 
 CameraControls.install({ THREE: THREE });
 
-let cube, scene, camera, renderer, cameraControls;
-const clock = new THREE.Clock();
 
 let water, sun;
-let waterBody;
 let waterGroup;
-
 let cameraRig = new THREE.Group();
 
-const tmpVector = new THREE.Vector3(10,10,10);
+let cube, scene, camera, renderer, cameraControls;
+const clock = new THREE.Clock();
 
 export default function Main() {
     const containerRef = useRef();
@@ -31,8 +28,7 @@ export default function Main() {
     const teleportBtnRef = useRef();
     useEffect(() => {
         Init();
-        
-        // installFuncHotkey(CameraMove, "t")
+        EnvSetUp();
         install(teleportBtnRef.current, "t")
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -74,13 +70,17 @@ export default function Main() {
 
         cameraRig.add(camera);
 
+        
+    }
+
+    function EnvSetUp(){
         sun = new THREE.Vector3();
 
         // Water
         waterGroup = new THREE.Group();
 
         const waterGeometry = new THREE.PlaneGeometry(1000, 1000);
-     
+
 
         water = new Water(waterGeometry, {
             textureWidth: 512,
@@ -100,9 +100,9 @@ export default function Main() {
         });
         //0x7F7F7F
         water.rotation.x = -Math.PI / 2;
-       
 
-        
+
+
         waterGroup.add(water);
         scene.add(waterGroup);
 
@@ -149,7 +149,7 @@ export default function Main() {
         // azimuthController = folderSky.add(parameters, 'azimuth', - 180, 180, 0.1).onChange(updateSun);
         folderSky.open();
 
-        
+
 
         Light(scene);
     }
@@ -167,11 +167,11 @@ export default function Main() {
         renderer.render(scene, camera);
     }
 
-    function CameraMove(){
+    function CameraMove() {
         // 
         // cameraRig.translateZ(10)
         // cameraRig.position.add(tmpVector)
-        cameraRig.position.add(new THREE.Vector3(10,10,10))
+        cameraRig.position.add(new THREE.Vector3(10, 10, 10))
 
         // console.log(`${cameraRig.matrix.elements}`)
         // console.log(`${cameraRig.matrixWorld.elements}`)
@@ -188,7 +188,7 @@ export default function Main() {
         }}
             ref={containerRef}
         >
-            <div style={{position:"absolute"}}>
+            <div style={{ position: "absolute" }}>
                 <button ref={teleportBtnRef} onClick={CameraMove}>Camera Move</button>
             </div>
             <canvas ref={canvasRef} />

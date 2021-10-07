@@ -37,7 +37,10 @@ let waterGroup;
 // let elevationController
 // let azimuthController
 
+// legacy
 let cameraRig = new THREE.Group();
+
+let cameraOnlyRig = new THREE.Group();
 
 let controller0;
 let controller1;
@@ -248,6 +251,9 @@ export default function Main() {
         new THREE.Mesh(geometry2, new THREE.MeshNormalMaterial())
       );
     });
+
+
+    cameraOnlyRig.add(camera);
   }
 
   function EnterXRHotkey() {
@@ -257,7 +263,7 @@ export default function Main() {
 
   function preXR() {
     cameraControls.dispose();
-    teleport = new Teleport(renderer, cameraRig, controller0, controller1, {
+    teleport = new Teleport(renderer, cameraRig, cameraOnlyRig,controller0, controller1, {
       // destMarker: new THREE.Group(),
       rightHanded: true,
       playerHandHelper: playerHandHelper,
@@ -289,7 +295,8 @@ export default function Main() {
       );
       camera.position.y = 30;
       camera.position.z = 30;
-      cameraRig.add(camera);
+      // cameraRig.add(camera);
+      cameraOnlyRig.add(camera);
       cameraControls = new CameraControls(camera, renderer.domElement);
 
       // camera controls 위치 디폴트로 이동시키기 ...
@@ -650,7 +657,7 @@ export default function Main() {
     controller0 = renderer.xr.getController(0);
     controller1 = renderer.xr.getController(1);
 
-    cameraRig.add(camera);
+    // cameraRig.add(camera);
     cameraRig.add(controller0);
     cameraRig.add(controller1);
     // window.addEventListener("resize", () => resizer(camera, renderer));

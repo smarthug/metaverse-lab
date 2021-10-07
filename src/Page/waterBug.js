@@ -10,17 +10,13 @@ import { install } from '@github/hotkey'
 
 
 
+CameraControls.install({ THREE: THREE });
 
 let water, sun;
-let waterBody;
 let waterGroup;
-
-
-
 let cameraRig = new THREE.Group();
 
 
-CameraControls.install({ THREE: THREE });
 
 let cube, scene, camera, renderer, cameraControls
 const clock = new THREE.Clock();
@@ -36,37 +32,12 @@ export default function Main() {
   useEffect(() => {
     Init();
     EnvSetUp();
-    // teleport setup func needed
-
-
-
 
     install(teleportBtnRef.current, "t")
 
-    // installFuncHotkey(ElevationControl(1), "ArrowUp")
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-
-
-
-
-  function Logger() {
-    console.log(scene);
-
-
-  }
-
-
-
-
-
-
-
-
-
-
 
   function CameraMove() {
     // 
@@ -90,8 +61,7 @@ export default function Main() {
     waterGroup = new THREE.Group();
 
     const waterGeometry = new THREE.PlaneGeometry(1000, 1000);
-    // const waterGeometry = new THREE.BoxGeometry( 100, 100,100 );
-    const waterBodyGeo = new THREE.BoxGeometry(1000, 100, 1000);
+
 
     water = new Water(waterGeometry, {
       textureWidth: 512,
@@ -102,7 +72,6 @@ export default function Main() {
           texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         }
       ),
-      // sunDirection: new THREE.Vector3(),
       sunDirection: new THREE.Vector3(100, 100, 100),
       sunColor: 0xffffff,
       waterColor: 0x001e0f,
@@ -111,15 +80,7 @@ export default function Main() {
     });
     //0x7F7F7F
     water.rotation.x = -Math.PI / 2;
-    const waterBodyMat = new THREE.MeshBasicMaterial({
-      transparent: true,
-      opacity: 0.62,
-      color: 0x001e0f,
-      side: THREE.DoubleSide,
-    });
-    waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat);
 
-    waterBody.position.y = -50.01;
 
     // waterGroup.add(waterBody);
     waterGroup.add(water);

@@ -18,7 +18,7 @@
 
 // export * as PlayGround from './playGround'
 
-// export * as DamTeleport from './damTeleport'
+export * as DamTeleport from './damTeleport'
 // export * as DoubleRenderBug from './doubleRenderBug'
 export * as WaterBug from './waterBug'
 export * as MinimalReproducedError from './minimalReproducedError'

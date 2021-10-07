@@ -65,6 +65,7 @@ export default class Teleport extends THREE.EventDispatcher {
     constructor(
         renderer,
         cameraRig,
+        cameraOnlyRig,
         controller0,
         controller1,
         {
@@ -85,6 +86,8 @@ export default class Teleport extends THREE.EventDispatcher {
 
         // player
         this._cameraRig = cameraRig;
+
+        this._cameraOnlyRig = cameraOnlyRig;
 
         this._hander = rightHanded ? "right" : "left";
 
@@ -268,12 +271,20 @@ export default class Teleport extends THREE.EventDispatcher {
             this._resultVector.multiplyScalar(this._multiplyScalar)
         );
 
+        this._cameraOnlyRig.position.add(
+            this._resultVector
+        )
+
         this._destMarker.getWorldDirection(directionVec);
 
         tmpMatrix.lookAt(centerVec, directionVec, upVec);
 
         tmpQuaternion.setFromRotationMatrix(tmpMatrix);
         this._cameraRig.setRotationFromQuaternion(tmpQuaternion);
+        this._cameraOnlyRig.setRotationFromQuaternion(tmpQuaternion);
+
+        console.log(this._cameraRig)
+        console.log(this._cameraOnlyRig)
 
         // exportedSend({"test":999})
         // console.log(this._cameraRig.position.toArray())
