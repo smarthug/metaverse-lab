@@ -16,16 +16,16 @@ export default function App() {
                 gun.get('text').put({ text: "Write the text here" })
             } else {
                 console.log("Found Node")
-                console.log(node)
-                console.log(node.text)
-                console.log("test\\ntest")
-                console.log("test\ntest")
-                console.log("test\ntest" === node.text)
-                console.log("test\\ntest" === node.text)
-                console.log("test\ntest" === node.text.replaceAll(/\\\\n/gm, "\\\\n"))
-                // setTxt("test\ntest")
-                // setTxt(node.text)
-                console.log(node.text.replaceAll(/\\n/gm, "\n"))
+                // console.log(node)
+                // console.log(node.text)
+                // console.log("test\\ntest")
+                // console.log("test\ntest")
+                // console.log("test\ntest" === node.text)
+                // console.log("test\\ntest" === node.text)
+                // console.log("test\ntest" === node.text.replaceAll(/\\\\n/gm, "\\\\n"))
+                // // setTxt("test\ntest")
+                // // setTxt(node.text)
+                // console.log(node.text.replaceAll(/\\n/g, "\n"))
                 setTxt(node.text.replaceAll(/\\n/gm, "\n"))
                 // test\ntest
             }
@@ -36,14 +36,14 @@ export default function App() {
             console.log(node)
             console.log(node.text)
             // setTxt(node.text.replaceAll(/\n/gm, "\\\\n"))
-            setTxt(node.text)
+            setTxt(node.text.replaceAll(/\\n/gm, "\n"))
         })
     }, [])
 
     const updateText = (event) => {
         console.log("Updating Text")
         console.log(event.target.value)
-        // gun.get('text').put({ text: event.target.value }) // Edit the value in our db
+        gun.get('text').put({ text: event.target.value }) // Edit the value in our db
 
         setTxt(event.target.value);
     }
