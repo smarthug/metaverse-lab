@@ -24,6 +24,8 @@
 // export * as MinimalReproducedError from './minimalReproducedError'
 export * as MirrorBugTest from './mirrorBugTest'
 
-export * as GunDoc from './gunDoc'
+// export * as GunDoc from './gunDoc'
 
-export * as NewLineTest from './NewLineTest'
+// export * as NewLineTest from './NewLineTest'
+
+export * as CameraTest from './cameraTest'
