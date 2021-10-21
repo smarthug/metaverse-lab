@@ -29,3 +29,5 @@ export * as MirrorBugTest from './mirrorBugTest'
 // export * as NewLineTest from './NewLineTest'
 
 export * as CameraTest from './cameraTest'
+
+export * as GunTest from './gunTest'
