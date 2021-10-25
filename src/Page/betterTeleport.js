@@ -65,32 +65,71 @@ export default function Main() {
             //add ring on bottom...
 
             const group = new THREE.Group();
-            glb.position.set(0,0.3,0)
+            glb.position.set(0, 0.3, 0)
             group.add(glb);
+
+            const arrowGroup = new THREE.Group();
+
+            const conegeometry = new THREE.ConeGeometry(0.05, 0.1, 6);
+            const conematerial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+            const cone = new THREE.Mesh(conegeometry, conematerial);
+            cone.position.set(0, 0.2, 0)
+            arrowGroup.add(cone);
+
+            const geometrycylinder = new THREE.CylinderGeometry(0.02, 0.02, 0.3, 4);
+            const materialcylinder = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+            const cylinder = new THREE.Mesh(geometrycylinder, materialcylinder);
+            arrowGroup.add(cylinder);
+
+            arrowGroup.rotateX(Math.PI/2)
+            arrowGroup.position.set(0,0.6,0)
+            group.add(arrowGroup)
 
             const geometry = new THREE.TorusGeometry(0.15, 0.01, 16, 100);
             const material = new THREE.MeshBasicMaterial({ color: 0x00ffff });
             const torus = new THREE.Mesh(geometry, material);
-            torus.rotateX(Math.PI/2)
+            torus.rotateX(Math.PI / 2)
             group.add(torus);
 
-
+            
+            
             scene.add(group);
         })
 
         Loader('models/teleportAvatar.glb').then((glb) => {
 
-            const geometry = new THREE.TorusGeometry(1.25, 0.1, 16, 100);
+            const group = new THREE.Group();
+
+            const geometry = new THREE.TorusGeometry(0.25, 0.02, 16, 100);
             const material = new THREE.MeshBasicMaterial({ color: 0x00ffff });
             const torus = new THREE.Mesh(geometry, material);
-            torus.rotateX(Math.PI/2)
-            glb.add(torus);
+            torus.rotateX(Math.PI / 2)
+            group.add(torus);
+
+            const arrowGroup = new THREE.Group();
+
+            const conegeometry = new THREE.ConeGeometry(0.05, 0.1, 6);
+            const conematerial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+            const cone = new THREE.Mesh(conegeometry, conematerial);
+            cone.position.set(0, 0.2, 0)
+            arrowGroup.add(cone);
+
+            const geometrycylinder = new THREE.CylinderGeometry(0.02, 0.02, 0.3, 4);
+            const materialcylinder = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+            const cylinder = new THREE.Mesh(geometrycylinder, materialcylinder);
+            arrowGroup.add(cylinder);
+
+            arrowGroup.rotateX(Math.PI/2)
+            arrowGroup.position.set(0,1.4,0)
+            group.add(arrowGroup)
 
 
             glb.scale.set(0.2, 0.2, 0.2)
             console.log(glb)
-            glb.position.set(2, 0, 0)
-            scene.add(glb);
+            group.add(arrowGroup)
+            group.add(glb)
+            group.position.set(2, 0, 0)
+            scene.add(group);
         })
     }
 
