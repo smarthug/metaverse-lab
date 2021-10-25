@@ -18,11 +18,11 @@
 
 // export * as PlayGround from './playGround'
 
-// export * as DamTeleport from './damTeleport'
+export * as DamTeleport from './damTeleport'
 // export * as DoubleRenderBug from './doubleRenderBug'
 // export * as WaterBug from './waterBug'
 // export * as MinimalReproducedError from './minimalReproducedError'
-export * as MirrorBugTest from './mirrorBugTest'
+// export * as MirrorBugTest from './mirrorBugTest'
 
 // export * as GunDoc from './gunDoc'
 
@@ -31,3 +31,5 @@ export * as MirrorBugTest from './mirrorBugTest'
 export * as CameraTest from './cameraTest'
 
 export * as GunTest from './gunTest'
+
+export * as BetterTeleport from './betterTeleport'
