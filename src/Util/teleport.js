@@ -1,5 +1,4 @@
 import * as THREE from "three";
-// import { exportedSend } from "../../webRTC/component/widgetUI";
 
 const tmpQuaternion = new THREE.Quaternion();
 const tmpMatrix = new THREE.Matrix4();
@@ -16,14 +15,11 @@ const directionVec = new THREE.Vector3();
 const tmp = new THREE.Vector3();
 
 // mock dest marker
-// const cone = new THREE.Mesh(
-//     new THREE.ConeGeometry(0.5, 1.5, 32),
-//     new THREE.MeshNormalMaterial({ wireframe: false })
-// );
+const cone = new THREE.Mesh(
+    new THREE.ConeGeometry(0.5, 1.5, 32),
+    new THREE.MeshNormalMaterial({ wireframe: false })
+);
 
-
-
-// test 필요 , 일치화 된듯 ...
 // const isOculusBrowser = /OculusBrowser/.test(navigator.userAgent);
 const isOculusBrowser = false;
 
@@ -48,18 +44,8 @@ const matHelper = new THREE.MeshBasicMaterial({
 });
 
 const lineMesh = new THREE.Line(lineGeo, matHelper);
-// lineMesh.name = 'the fuck'
 
-const dir = new THREE.Vector3(1, 0, 0);
 
-//normalize the direction vector (convert to vector of length 1)
-dir.normalize();
-
-const origin = new THREE.Vector3(0, 0, 0);
-const length = 1;
-const hex = 0xffff00;
-
-const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
 
 export default class Teleport extends THREE.EventDispatcher {
     constructor(
@@ -91,19 +77,14 @@ export default class Teleport extends THREE.EventDispatcher {
 
         this._hander = rightHanded ? "right" : "left";
 
-        // tmp
-        // left right
-        // 1 0 true
-        // left right
-        // 0 1 false
         this._handsOrder = true;
 
         if (destMarker === undefined) {
-            // destMarker = new THREE.Object3D();
+            destMarker = new THREE.Object3D();
 
-            // cone.rotateX((90 * Math.PI) / 180);
-            // destMarker.add(cone);
-            // this._cameraRig.parent.add(destMarker);
+            cone.rotateX((90 * Math.PI) / 180);
+            destMarker.add(cone);
+            this._cameraRig.parent.add(destMarker);
 
 
 
@@ -113,7 +94,6 @@ export default class Teleport extends THREE.EventDispatcher {
 
             // cone.rotateX((90 * Math.PI) / 180);
             // 넣어보자 ... 
-            destMarker.add(arrowHelper);
             this._cameraRig.parent.add(destMarker);
         }
 
@@ -154,16 +134,14 @@ export default class Teleport extends THREE.EventDispatcher {
 
         this._cameraRig.parent.add(this._helperLine);
         this._cameraRig.parent.add(this._helperLine2);
-        // 
+        
         this.onSelectEnd = () => {
-            // 안보이게 ... 
             this._destMarker.visible = false
             this._helperLine2.visible = false;
             this.teleport();
         };
 
         this.onSqueezeStart = () => {
-            // 보이게 ...
             this._destMarker.visible= true;
             this._helperLine2.visible = true;
         }
@@ -175,20 +153,6 @@ export default class Teleport extends THREE.EventDispatcher {
         this.onToSqueezeStart = () => {
             this._multiplyScalar *= 2;
         };
-
-        // if (rightHanded === !isOculusBrowser) {
-        //     controller0.add(this._destHand);
-        //     controller1.add(this._playerHand);
-        //     controller0.addEventListener("squeezestart", onToSqueezeStart);
-        //     controller1.addEventListener("squeezestart", onFromSqueezeStart);
-        //     controller0.addEventListener("selectend", onSelectEnd);
-        // } else {
-        //     controller0.add(this._playerHand);
-        //     controller1.add(this._destHand);
-        //     controller0.addEventListener("squeezestart", onFromSqueezeStart);
-        //     controller1.addEventListener("squeezestart", onToSqueezeStart);
-        //     controller1.addEventListener("selectend", onSelectEnd);
-        // }
 
         tmpMatrix.lookAt(centerVec, new THREE.Vector3(0, 0, 1), upVec);
 
@@ -295,13 +259,7 @@ export default class Teleport extends THREE.EventDispatcher {
         this._cameraRig.setRotationFromQuaternion(tmpQuaternion);
         this._cameraOnlyRig.setRotationFromQuaternion(tmpQuaternion);
 
-        console.log(this._cameraRig)
-        console.log(this._cameraOnlyRig)
 
-        // exportedSend({"test":999})
-        // console.log(this._cameraRig.position.toArray())
-        // let tmp = this._cameraRig.position.toArray();
-        // exportedSend({ playerPos: tmp, type: "teleport" });
     }
 
     setDistance(value) {
@@ -309,16 +267,6 @@ export default class Teleport extends THREE.EventDispatcher {
     }
 
     handsInit(rightHanded) {
-        // 초기화 first
-        //
-        // controller 0 이 right 이면 true 가 오고
-        // left 이면 false 가 옴 ...
-        // 어찌됐든 refactoring 필요 ....
-
-        // this._hander = rightHanded ? "right" : "left";
-        // console.log(this._hander)
-
-        //remove events
         this._controller0.removeEventListener(
             "squeezestart",
             this.onToSqueezeStart
@@ -356,9 +304,6 @@ export default class Teleport extends THREE.EventDispatcher {
                 this._hander = "left";
             }
         } else {
-            // 오른손 잡이 인데 여기로 들어와서 잘 작동됨 ...
-            // 하지만 hander 가 left 가 된 상황이지 ...
-            // hands order 이라고 임시로 만들까 ...
             this._controller0.add(this._playerHand);
             this._controller1.add(this._destHand);
 
@@ -377,37 +322,12 @@ export default class Teleport extends THREE.EventDispatcher {
     }
 
     dispose() {
-        console.log("really disposed???")
         this._scene.remove(this._helperLine);
         this._scene.remove(this._helperLine2);
 
         this._helperLine.material.visible = false
         this._helperLine2.material.visible = false
-
-        // this._cameraRig.parent.remove(this._helperLine);
-        // this._cameraRig.parent.remove(this._helperLine2);
-
-        // destmarker 도 없애기 ... 걍 remove 만 하자 ... 
-        // destMarker
         this._cameraRig.parent.remove(this._destMarker);
     }
 
-    // onSelectEnd() {
-    //     this.teleport();
-    // }
-    // onFromSqueezeStart() {
-    //     this._multiplyScalar *= 0.5;
-    // }
-
-    // onToSqueezeStart() {
-    //     this._multiplyScalar *= 2;
-    // }
-
-    //     const onFromSqueezeStart = () => {
-    //         this._multiplyScalar *= 0.5;
-    //     };
-
-    //     const onToSqueezeStart = () => {
-    //         this._multiplyScalar *= 2;
-    //     };
 }

@@ -3,8 +3,6 @@ import React, { useEffect, useRef } from "react";
 import CameraControls from "camera-controls";
 import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
 import { installFuncHotkey } from "use-github-hotkey";
-import { TWEEN } from "three/examples/jsm/libs/tween.module.min";
-import { GUI } from "dat.gui";
 import Loader from "../Util/loader";
 import Light from "../Util/light";
 import { SceneSetUp } from '../Util/setUp'
