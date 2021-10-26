@@ -112,6 +112,7 @@ export default class Teleport extends THREE.EventDispatcher {
             destMarker = new THREE.Object3D();
 
             // cone.rotateX((90 * Math.PI) / 180);
+            // 넣어보자 ... 
             destMarker.add(arrowHelper);
             this._cameraRig.parent.add(destMarker);
         }

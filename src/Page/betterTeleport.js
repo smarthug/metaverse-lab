@@ -23,6 +23,8 @@ let controller1;
 let playerHandHelper = new THREE.Group();
 let destHandHelper = new THREE.Group();
 
+let myDestMarker
+
 
 CameraControls.install({ THREE: THREE });
 
@@ -47,6 +49,17 @@ export default function Main() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // setOpacity( myGroup, 0.5 );
+    function setOpacity(obj, opacity) {
+        obj.children.forEach((child) => {
+            setOpacity(child, opacity);
+        })
+        if (obj.material) {
+            obj.material.transparent = true;
+            obj.material.opacity = opacity;
+        };
+    };
 
 
     function betterSetup() {
@@ -81,8 +94,8 @@ export default function Main() {
             const cylinder = new THREE.Mesh(geometrycylinder, materialcylinder);
             arrowGroup.add(cylinder);
 
-            arrowGroup.rotateX(Math.PI/2)
-            arrowGroup.position.set(0,0.6,0)
+            arrowGroup.rotateX(Math.PI / 2)
+            arrowGroup.position.set(0, 0.6, 0)
             group.add(arrowGroup)
 
             const geometry = new THREE.TorusGeometry(0.15, 0.01, 16, 100);
@@ -91,8 +104,9 @@ export default function Main() {
             torus.rotateX(Math.PI / 2)
             group.add(torus);
 
-            
-            
+
+            // setOpacity(glb, 0.1)
+            // myDestMarker = group
             scene.add(group);
         })
 
@@ -119,8 +133,8 @@ export default function Main() {
             const cylinder = new THREE.Mesh(geometrycylinder, materialcylinder);
             arrowGroup.add(cylinder);
 
-            arrowGroup.rotateX(Math.PI/2)
-            arrowGroup.position.set(0,1.4,0)
+            arrowGroup.rotateX(Math.PI / 2)
+            arrowGroup.position.set(0, 1.4, 0)
             group.add(arrowGroup)
 
 
@@ -129,6 +143,9 @@ export default function Main() {
             group.add(arrowGroup)
             group.add(glb)
             group.position.set(2, 0, 0)
+            console.log(group)
+            // setOpacity(glb, 0.1)
+            myDestMarker = group;
             scene.add(group);
         })
     }
@@ -137,7 +154,7 @@ export default function Main() {
     function preXR() {
         cameraControls.dispose();
         teleport = new Teleport(renderer, cameraRig, cameraOnlyRig, controller0, controller1, {
-            // destMarker: new THREE.Group(),
+            destMarker: myDestMarker,
             rightHanded: true,
             playerHandHelper: playerHandHelper,
             destHandHelper: destHandHelper,
