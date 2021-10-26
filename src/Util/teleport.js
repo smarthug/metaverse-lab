@@ -140,6 +140,7 @@ export default class Teleport extends THREE.EventDispatcher {
 
         // marker to show where to be teleported
         this._destMarker = destMarker;
+        this._destMarker.visible = false
 
         this._tmpVector = new THREE.Vector3();
         this._resultVector = new THREE.Vector3();
@@ -149,13 +150,23 @@ export default class Teleport extends THREE.EventDispatcher {
 
         this._helperLine = lineMesh.clone()
         this._helperLine2 = lineMesh.clone();
+        this._helperLine2.visible = false;
 
         this._cameraRig.parent.add(this._helperLine);
         this._cameraRig.parent.add(this._helperLine2);
         // 
         this.onSelectEnd = () => {
+            // 안보이게 ... 
+            this._destMarker.visible = false
+            this._helperLine2.visible = false;
             this.teleport();
         };
+
+        this.onSqueezeStart = () => {
+            // 보이게 ...
+            this._destMarker.visible= true;
+            this._helperLine2.visible = true;
+        }
 
         this.onFromSqueezeStart = () => {
             this._multiplyScalar *= 0.5;
@@ -336,6 +347,9 @@ export default class Teleport extends THREE.EventDispatcher {
             this._controller0.addEventListener("squeezeend", this.onSelectEnd);
             this._controller1.addEventListener("squeezeend", this.onSelectEnd);
 
+            this._controller0.addEventListener("squeezestart", this.onSqueezeStart);
+            this._controller1.addEventListener("squeezestart", this.onSqueezeStart);
+
             if (this._handsOrder) {
                 this._hander = "right";
             } else {
@@ -350,6 +364,9 @@ export default class Teleport extends THREE.EventDispatcher {
 
             this._controller0.addEventListener("squeezeend", this.onSelectEnd);
             this._controller1.addEventListener("squeezeend", this.onSelectEnd);
+
+            this._controller0.addEventListener("squeezestart", this.onSqueezeStart);
+            this._controller1.addEventListener("squeezestart", this.onSqueezeStart);
 
             if (this._handsOrder) {
                 this._hander = "left";
