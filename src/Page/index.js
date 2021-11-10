@@ -32,4 +32,8 @@
 
 // export * as GunTest from './gunTest'
 
-export * as BetterTeleport from './betterTeleport'
+// export * as BetterTeleport from './betterTeleport'
+
+// export * as ProxyTest from './proxyTest'
+
+export * as I18NTest from './i18nTest'

@@ -39,5 +39,24 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <!-- <script type="module">
+      // Find the latest version by visiting https://cdn.skypack.dev/three.
+
+      import * as THREE from "https://cdn.skypack.dev/three";
+      import { OrbitControls } from 'https://cdn.skypack.dev/three@0.134.0/examples/jsm/controls/OrbitControls.js';
+
+      const scene = new THREE.Scene();
+      console.log(THREE);
+      console.log(OrbitControls)
+    </script> -->
+
+    <script type="importmap">
+      {
+        "imports": {
+          "test": "https://cdn.skypack.dev/three"
+        }
+      }
+    </script>
   </body>
 </html>

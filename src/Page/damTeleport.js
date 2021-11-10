@@ -25,6 +25,10 @@ import { nameCard } from "../Util/spriteText";
 // import { HTMLMesh } from 'three/examples/jsm/interactive/HTMLMesh'
 import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory";
 
+import * as What from 'https://cdn.skypack.dev/three@<0.134>';
+
+console.log(What)
+
 const url =
   "http://booster-app.account7172.workers.dev/openapi-data/service/pubd/dam/sluicePresentCondition/mnt/list?damcode=1012110&stdt=2021-09-05&eddt=2021-09-05&numOfRows=144&pageNo=undefined&serviceKey=ejdrD89pyah0JlAaICprH0xOAEp0tAxvExhm2p0DT5Ulq2MskjlekFH7kFIAEt6d16gjJ2scGwRSLG4Rr1HUiA==";
 
