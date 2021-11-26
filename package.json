@@ -24,7 +24,7 @@
     "react-scripts": "4.0.3",
     "three": "^0.131.3",
     "three-spritetext": "^1.6.2",
-    "use-github-hotkey": "^1.0.2",
+    "use-github-hotkey": "^1.0.4",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

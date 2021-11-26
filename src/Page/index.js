@@ -36,4 +36,6 @@
 
 // export * as ProxyTest from './proxyTest'
 
-export * as I18NTest from './i18nTest'
+// export * as I18NTest from './i18nTest'
+
+export * as Bolt from './bolt'

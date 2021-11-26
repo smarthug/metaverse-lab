@@ -1,21 +1,36 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import Footer from '../Component/footer'
 
+import { installFuncHotkey } from 'use-github-hotkey'
+
+
+// with useHotkey fix test ...
+
 const lngs = {
-    en: { nativeName: 'English'},
-    de: { nativeName: 'Deutsch'},
-    ko: { nativeName: 'Korean'}
+    en: { nativeName: 'English' },
+    de: { nativeName: 'Deutsch' },
+    ko: { nativeName: 'Korean' }
 }
 
 export default function Main() {
     const { t, i18n } = useTranslation();
 
+
+    function Test() {
+        alert("works")
+    }
+
+    useEffect(() => {
+        installFuncHotkey(Test, "h")
+
+    }, [])
+
     return (
         <div>
             <div>
                 {Object.keys(lngs).map((lng) => (
-                    <button key={lng} style={{ fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal'}} type="submit" onClick={() => i18n.changeLanguage(lng)}>
+                    <button key={lng} style={{ fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal' }} type="submit" onClick={() => i18n.changeLanguage(lng)}>
                         {lngs[lng].nativeName}
                     </button>
                 ))}
@@ -33,6 +48,8 @@ export default function Main() {
                 {t('description.part2')}
             </a>
             <Footer t={t} />
+
+            <textarea id="text-area-1"  rows="4" cols="40"> text area 1</textarea>
         </div>
     )
 }
